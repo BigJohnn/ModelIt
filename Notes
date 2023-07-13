@@ -1,0 +1,6 @@
+1.VLFeat不支持arm架构，
+2.#   spec.xcconfig = {
+#   'HEADER_SEARCH_PATHS' => '${PROJECT_DIR}/../**' 
+#   }
+#这里不要去搜eigen的头文件路径，否则会出Could not build module 'Darwin'
+PROJECT_DIR=>.xcodeproj的路径
