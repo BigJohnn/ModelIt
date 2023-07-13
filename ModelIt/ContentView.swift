@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+func setup()
+{
+    let pipeline = Pipeline_Create()
+    Pipeline_CameraInit(pipeline)
+}
+
 struct ContentView: View {
     var body: some View {
         VStack {
@@ -14,6 +20,10 @@ struct ContentView: View {
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
             Text("Hello, world!")
+            Button("CameraInit") {
+                setup()
+            }
+            
         }
         .padding()
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C887EA63D896D928F1160745 /* libPods-ModelIt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDF94606195526C0F89E4F7 /* libPods-ModelIt.a */; };
 		FA9F43292A5FADDF00ED4286 /* ModelItApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43282A5FADDF00ED4286 /* ModelItApp.swift */; };
 		FA9F432B2A5FADDF00ED4286 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F432A2A5FADDF00ED4286 /* ContentView.swift */; };
 		FA9F432D2A5FADE000ED4286 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA9F432C2A5FADE000ED4286 /* Assets.xcassets */; };
@@ -14,6 +15,8 @@
 		FA9F433A2A5FADE000ED4286 /* ModelItTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43392A5FADE000ED4286 /* ModelItTests.swift */; };
 		FA9F43442A5FADE000ED4286 /* ModelItUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43432A5FADE000ED4286 /* ModelItUITests.swift */; };
 		FA9F43462A5FADE000ED4286 /* ModelItUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43452A5FADE000ED4286 /* ModelItUITestsLaunchTests.swift */; };
+		FA9F43552A600CEF00ED4286 /* call_c_bridge.h in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43542A60046C00ED4286 /* call_c_bridge.h */; };
+		FA9F43592A6026AF00ED4286 /* cpp_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43582A6026AF00ED4286 /* cpp_wrapper.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3BA4C918C59D400A4A0138E9 /* Pods-ModelIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelIt.debug.xcconfig"; path = "Target Support Files/Pods-ModelIt/Pods-ModelIt.debug.xcconfig"; sourceTree = "<group>"; };
+		CCDF94606195526C0F89E4F7 /* libPods-ModelIt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ModelIt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF43E79D4A88AE4FDF26D058 /* Pods-ModelIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelIt.release.xcconfig"; path = "Target Support Files/Pods-ModelIt/Pods-ModelIt.release.xcconfig"; sourceTree = "<group>"; };
 		FA9F43252A5FADDF00ED4286 /* ModelIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA9F43282A5FADDF00ED4286 /* ModelItApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelItApp.swift; sourceTree = "<group>"; };
 		FA9F432A2A5FADDF00ED4286 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +50,8 @@
 		FA9F433F2A5FADE000ED4286 /* ModelItUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ModelItUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA9F43432A5FADE000ED4286 /* ModelItUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelItUITests.swift; sourceTree = "<group>"; };
 		FA9F43452A5FADE000ED4286 /* ModelItUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelItUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		FA9F43542A60046C00ED4286 /* call_c_bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = call_c_bridge.h; sourceTree = "<group>"; };
+		FA9F43582A6026AF00ED4286 /* cpp_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cpp_wrapper.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C887EA63D896D928F1160745 /* libPods-ModelIt.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +80,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3608D19EEE827D72D27E2F0F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CCDF94606195526C0F89E4F7 /* libPods-ModelIt.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		481E082FAD2ACC422438C3A3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3BA4C918C59D400A4A0138E9 /* Pods-ModelIt.debug.xcconfig */,
+				EF43E79D4A88AE4FDF26D058 /* Pods-ModelIt.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		FA9F431C2A5FADDF00ED4286 = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +104,8 @@
 				FA9F43382A5FADE000ED4286 /* ModelItTests */,
 				FA9F43422A5FADE000ED4286 /* ModelItUITests */,
 				FA9F43262A5FADDF00ED4286 /* Products */,
+				481E082FAD2ACC422438C3A3 /* Pods */,
+				3608D19EEE827D72D27E2F0F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,6 +126,8 @@
 				FA9F432A2A5FADDF00ED4286 /* ContentView.swift */,
 				FA9F432C2A5FADE000ED4286 /* Assets.xcassets */,
 				FA9F432E2A5FADE000ED4286 /* Preview Content */,
+				FA9F43542A60046C00ED4286 /* call_c_bridge.h */,
+				FA9F43582A6026AF00ED4286 /* cpp_wrapper.cpp */,
 			);
 			path = ModelIt;
 			sourceTree = "<group>";
@@ -134,6 +164,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA9F43492A5FADE000ED4286 /* Build configuration list for PBXNativeTarget "ModelIt" */;
 			buildPhases = (
+				E6FA6074BF642E41B81BF816 /* [CP] Check Pods Manifest.lock */,
 				FA9F43212A5FADDF00ED4286 /* Sources */,
 				FA9F43222A5FADDF00ED4286 /* Frameworks */,
 				FA9F43232A5FADDF00ED4286 /* Resources */,
@@ -252,6 +283,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		E6FA6074BF642E41B81BF816 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ModelIt-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FA9F43212A5FADDF00ED4286 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -259,6 +315,8 @@
 			files = (
 				FA9F432B2A5FADDF00ED4286 /* ContentView.swift in Sources */,
 				FA9F43292A5FADDF00ED4286 /* ModelItApp.swift in Sources */,
+				FA9F43552A600CEF00ED4286 /* call_c_bridge.h in Sources */,
+				FA9F43592A6026AF00ED4286 /* cpp_wrapper.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,8 +407,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-std=libstdc";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = ModelIt/call_c_bridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -402,8 +462,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "-std=libstdc";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = ModelIt/call_c_bridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -411,6 +473,7 @@
 		};
 		FA9F434A2A5FADE000ED4286 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3BA4C918C59D400A4A0138E9 /* Pods-ModelIt.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -429,10 +492,20 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MARKETING_VERSION = 1.0;
+				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"SoftVision\"",
+				);
+				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.letitbe.ModelIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = ModelIt/call_c_bridge.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -440,6 +513,7 @@
 		};
 		FA9F434B2A5FADE000ED4286 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EF43E79D4A88AE4FDF26D058 /* Pods-ModelIt.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -458,10 +532,20 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MARKETING_VERSION = 1.0;
+				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"SoftVision\"",
+				);
+				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.letitbe.ModelIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = ModelIt/call_c_bridge.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
