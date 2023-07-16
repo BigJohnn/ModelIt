@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C887EA63D896D928F1160745 /* libPods-ModelIt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDF94606195526C0F89E4F7 /* libPods-ModelIt.a */; };
+		FA569C042A63DF8800CFE693 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA569C032A63DF8800CFE693 /* ThumbnailView.swift */; };
 		FA9F43292A5FADDF00ED4286 /* ModelItApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43282A5FADDF00ED4286 /* ModelItApp.swift */; };
 		FA9F432B2A5FADDF00ED4286 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F432A2A5FADDF00ED4286 /* ContentView.swift */; };
 		FA9F432D2A5FADE000ED4286 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA9F432C2A5FADE000ED4286 /* Assets.xcassets */; };
@@ -17,6 +18,10 @@
 		FA9F43462A5FADE000ED4286 /* ModelItUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43452A5FADE000ED4286 /* ModelItUITestsLaunchTests.swift */; };
 		FA9F43552A600CEF00ED4286 /* call_c_bridge.h in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43542A60046C00ED4286 /* call_c_bridge.h */; };
 		FA9F43592A6026AF00ED4286 /* cpp_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43582A6026AF00ED4286 /* cpp_wrapper.cpp */; };
+		FAD3AD4C2A624C7200BEC69B /* ImageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD3AD4B2A624C7200BEC69B /* ImageResizer.swift */; };
+		FAD3AD4E2A624FF500BEC69B /* PhotoCaptureProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD3AD4D2A624FF500BEC69B /* PhotoCaptureProcessor.swift */; };
+		FAD3AD502A625B4000BEC69B /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD3AD4F2A625B4000BEC69B /* CameraService.swift */; };
+		FAD3AD522A625CFF00BEC69B /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD3AD512A625CFF00BEC69B /* CameraPreview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +45,7 @@
 		3BA4C918C59D400A4A0138E9 /* Pods-ModelIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelIt.debug.xcconfig"; path = "Target Support Files/Pods-ModelIt/Pods-ModelIt.debug.xcconfig"; sourceTree = "<group>"; };
 		CCDF94606195526C0F89E4F7 /* libPods-ModelIt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ModelIt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF43E79D4A88AE4FDF26D058 /* Pods-ModelIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelIt.release.xcconfig"; path = "Target Support Files/Pods-ModelIt/Pods-ModelIt.release.xcconfig"; sourceTree = "<group>"; };
+		FA569C032A63DF8800CFE693 /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
 		FA9F43252A5FADDF00ED4286 /* ModelIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA9F43282A5FADDF00ED4286 /* ModelItApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelItApp.swift; sourceTree = "<group>"; };
 		FA9F432A2A5FADDF00ED4286 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -52,6 +58,10 @@
 		FA9F43452A5FADE000ED4286 /* ModelItUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelItUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		FA9F43542A60046C00ED4286 /* call_c_bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = call_c_bridge.h; sourceTree = "<group>"; };
 		FA9F43582A6026AF00ED4286 /* cpp_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cpp_wrapper.cpp; sourceTree = "<group>"; };
+		FAD3AD4B2A624C7200BEC69B /* ImageResizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageResizer.swift; sourceTree = "<group>"; };
+		FAD3AD4D2A624FF500BEC69B /* PhotoCaptureProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCaptureProcessor.swift; sourceTree = "<group>"; };
+		FAD3AD4F2A625B4000BEC69B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
+		FAD3AD512A625CFF00BEC69B /* CameraPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,8 +132,13 @@
 		FA9F43272A5FADDF00ED4286 /* ModelIt */ = {
 			isa = PBXGroup;
 			children = (
+				FAD3AD512A625CFF00BEC69B /* CameraPreview.swift */,
+				FAD3AD4D2A624FF500BEC69B /* PhotoCaptureProcessor.swift */,
+				FAD3AD4B2A624C7200BEC69B /* ImageResizer.swift */,
 				FA9F43282A5FADDF00ED4286 /* ModelItApp.swift */,
 				FA9F432A2A5FADDF00ED4286 /* ContentView.swift */,
+				FAD3AD4F2A625B4000BEC69B /* CameraService.swift */,
+				FA569C032A63DF8800CFE693 /* ThumbnailView.swift */,
 				FA9F432C2A5FADE000ED4286 /* Assets.xcassets */,
 				FA9F432E2A5FADE000ED4286 /* Preview Content */,
 				FA9F43542A60046C00ED4286 /* call_c_bridge.h */,
@@ -314,9 +329,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA9F432B2A5FADDF00ED4286 /* ContentView.swift in Sources */,
+				FAD3AD522A625CFF00BEC69B /* CameraPreview.swift in Sources */,
 				FA9F43292A5FADDF00ED4286 /* ModelItApp.swift in Sources */,
+				FA569C042A63DF8800CFE693 /* ThumbnailView.swift in Sources */,
+				FAD3AD4E2A624FF500BEC69B /* PhotoCaptureProcessor.swift in Sources */,
+				FAD3AD4C2A624C7200BEC69B /* ImageResizer.swift in Sources */,
 				FA9F43552A600CEF00ED4286 /* call_c_bridge.h in Sources */,
 				FA9F43592A6026AF00ED4286 /* cpp_wrapper.cpp in Sources */,
+				FAD3AD502A625B4000BEC69B /* CameraService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +377,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -419,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -477,12 +499,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ModelIt/Preview Content\"";
 				DEVELOPMENT_TEAM = PTQHEM5K3R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is needed to taking pictures.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use microphone to record sound";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Photo Library is needed for saving captured photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -517,12 +543,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ModelIt/Preview Content\"";
 				DEVELOPMENT_TEAM = PTQHEM5K3R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is needed to taking pictures.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use microphone to record sound";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Photo Library is needed for saving captured photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
