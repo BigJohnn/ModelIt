@@ -237,7 +237,7 @@ public class CameraService: NSObject, Identifiable {
         sessionQueue.async {
 //            self.addObservers()
             self.session.startRunning()
-            print("CAMERA RUNNING")
+//            print("CAMERA RUNNING")
 //            self.isSessionRunning = self.session.isRunning
             
 //            if self.session.isRunning {
@@ -282,12 +282,12 @@ public class CameraService: NSObject, Identifiable {
             if let photoOutputConnection = self.photoOutput.connection(with: .video) {
                 photoOutputConnection.videoOrientation = videoPreviewLayerOrientation
             }
-            var photoSettings = AVCapturePhotoSettings()
+            let photoSettings = AVCapturePhotoSettings()
             
             // Capture HEIF photos when supported. Enable according to user settings and high-resolution photos.
-            if  self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
-                photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
-            }
+//            if  self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+//                photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+//            }
             
             if !photoSettings.__availablePreviewPhotoPixelFormatTypes.isEmpty {
                 photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: photoSettings.__availablePreviewPhotoPixelFormatTypes.first!]

@@ -37,11 +37,10 @@ final class CameraModel: ObservableObject {
         }
         .store(in: &self.subscriptions)
         
-        //TODO: check
-//        service.$photoCache.sink { [weak self] (val) in
-//            self?.imagesCached = val
-//        }
-//        .store(in: &self.subscriptions)
+        service.$photoCache.sink { [weak self] (val) in
+            self?.imagesCached = val
+        }
+        .store(in: &self.subscriptions)
         
         /// Pipeline entrance
         let pipeline = Pipeline_Create()
@@ -50,6 +49,7 @@ final class CameraModel: ObservableObject {
     }
     
     func configure() {
+        //TODO: 加回来
 //        service.checkForPermissions()
         service.configure()
     }
@@ -127,14 +127,6 @@ struct CameraView: View {
                     Color.black.edgesIgnoringSafeArea(.all)
                     
                     VStack {
-//                        Button(action: {
-////                            model.switchFlash()
-//                        }, label: {
-//                            Image(systemName: model.isFlashOn ? "bolt.fill" : "bolt.slash.fill")
-//                                .font(.system(size: 20, weight: .medium, design: .default))
-//                        })
-//                        .accentColor(model.isFlashOn ? .yellow : .white)
-                        
                         CameraPreview(session: model.session)
                             .gesture(
                                 DragGesture().onChanged({ (val) in
@@ -169,13 +161,6 @@ struct CameraView: View {
                         HStack {
                             NavigationLink(destination:
                                             ThumbnailView(filteredUIImage: model.imagesCached)
-//                               for image in model.imagesCached {
-//                                   Image(uiImage: UIImage(data: image)!)
-//                                       .resizable()
-//                                       .aspectRatio(contentMode: .fill)
-//                                       .frame(width: 60, height: 60)
-//                                       .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-//                               }
                             ) {
                                 capturedPhotoThumbnail
                             }
