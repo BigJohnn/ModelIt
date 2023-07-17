@@ -16,13 +16,15 @@ class PhotoCaptureProcessor: NSObject {
     
     private let completionHandler: (PhotoCaptureProcessor) -> Void
     
-//    private let photoProcessingHandler: (Bool) -> Void
+    //    private let photoProcessingHandler: (Bool) -> Void
     
     var photoData: Data?
     
-    
-    
     private var maxPhotoProcessingTime: CMTime?
+    
+    public static var sfmData = [[String:Any]]()
+    
+    private static var frameId = 0
         
     init(with requestedPhotoSettings: AVCapturePhotoSettings,
          willCapturePhotoAnimation: @escaping () -> Void,
@@ -76,6 +78,29 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
             print("Error capturing photo: \(error)")
         } else {
             photoData = photo.fileDataRepresentation()
+            
+            let exif_table = photo.metadata["{Exif}"] as? [String:AnyObject]
+            print("FocalLength == \(String(describing: exif_table!["FocalLength"]))")
+            print("FNumber == \(String(describing: exif_table!["FNumber"]))")
+            print("PixelXDimension == \(String(describing: exif_table!["PixelXDimension"]))")
+            print("PixelYDimension == \(String(describing: exif_table!["PixelYDimension"]))")
+            
+            let uuid = UUID().uuidString
+            let item = [
+                "viewId":uuid,
+                "poseId":uuid,
+                "frameId":String(PhotoCaptureProcessor.frameId),
+                "data": photoData?.description as Any,
+                "width":String(describing: exif_table!["PixelXDimension"]!),
+                "height":String(describing: exif_table!["PixelYDimension"]!),
+                "metadata":exif_table as Any
+            ] as [String : Any]
+            PhotoCaptureProcessor.frameId += 1
+            PhotoCaptureProcessor.sfmData.append(item)
+            
+            
+//            sfmData.append({"poseId":UUID().uuidString})
+//            print(photo.metadata)
         }
     }
 
@@ -118,11 +143,14 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
         }
         
         DispatchQueue.main.async {
-//            self.completionHandler(self)
-            let photo = Photo(originalData: self.photoData!)
-            self.saveToPhotoLibrary(photo.compressedData!)
-            
-            
+            let bSaveToLibrary = false;
+            if(bSaveToLibrary) {
+                self.completionHandler(self)
+            }
+            else {
+                let photo = Photo(originalData: self.photoData!)
+                self.saveToPhotoLibrary(photo.compressedData!)
+            }
         }
     }
 }
