@@ -311,6 +311,7 @@ public class CameraService: NSObject, Identifiable {
                         self.photoCache.remove(at: 0)
                     }
                     self.photoCache.append(self.photo?.compressedData ?? Data())
+                    
                     //TODO: do something with this photo cache
                     
                 } else {

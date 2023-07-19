@@ -6,16 +6,13 @@
 //
 
 #include "call_c_bridge.h"
-#include "camerainit.h"
+#include "ReconPipeline.h"
 
-Pipeline Pipeline_Create()
-{
-    return new ReconPipeline();
-}
+static ReconPipeline* pPipeline = nullptr;
 
-void Pipeline_CameraInit(Pipeline pipeline)
+void Pipeline_CameraInit()
 {
-    ReconPipeline *p = (ReconPipeline*)pipeline;
+    ReconPipeline *p = ReconPipeline::GetInstance();
     p->CameraInit();
 }
 

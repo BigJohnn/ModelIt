@@ -37,7 +37,6 @@ struct ThumbnailView: View {
     @State  var selectedItems: [Data] = []
 //    let rows = [GridItem(.fixed(160)), GridItem(.fixed(160))]
     var body: some View {
-//        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
         NavigationView {
             ScrollView(.horizontal) {
                 

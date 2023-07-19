@@ -14,8 +14,7 @@ extern "C" {
 
 typedef void* Pipeline;
 
-Pipeline Pipeline_Create();
-void Pipeline_CameraInit(Pipeline pipeline);
+void Pipeline_CameraInit();
 
 #ifdef __cplusplus
 }

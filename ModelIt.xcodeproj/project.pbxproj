@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C887EA63D896D928F1160745 /* libPods-ModelIt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDF94606195526C0F89E4F7 /* libPods-ModelIt.a */; };
+		6D937A1FB12E108F2F981B56 /* libPods-ModelIt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6B23B1F9E9B0619221E4D7 /* libPods-ModelIt.a */; };
 		FA569C042A63DF8800CFE693 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA569C032A63DF8800CFE693 /* ThumbnailView.swift */; };
 		FA9F43292A5FADDF00ED4286 /* ModelItApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43282A5FADDF00ED4286 /* ModelItApp.swift */; };
 		FA9F432B2A5FADDF00ED4286 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F432A2A5FADDF00ED4286 /* ContentView.swift */; };
@@ -43,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		3BA4C918C59D400A4A0138E9 /* Pods-ModelIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelIt.debug.xcconfig"; path = "Target Support Files/Pods-ModelIt/Pods-ModelIt.debug.xcconfig"; sourceTree = "<group>"; };
-		CCDF94606195526C0F89E4F7 /* libPods-ModelIt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ModelIt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A6B23B1F9E9B0619221E4D7 /* libPods-ModelIt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ModelIt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF43E79D4A88AE4FDF26D058 /* Pods-ModelIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelIt.release.xcconfig"; path = "Target Support Files/Pods-ModelIt/Pods-ModelIt.release.xcconfig"; sourceTree = "<group>"; };
 		FA569C032A63DF8800CFE693 /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
 		FA9F43252A5FADDF00ED4286 /* ModelIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C887EA63D896D928F1160745 /* libPods-ModelIt.a in Frameworks */,
+				6D937A1FB12E108F2F981B56 /* libPods-ModelIt.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +93,7 @@
 		3608D19EEE827D72D27E2F0F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CCDF94606195526C0F89E4F7 /* libPods-ModelIt.a */,
+				5A6B23B1F9E9B0619221E4D7 /* libPods-ModelIt.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -139,10 +139,10 @@
 				FA9F432A2A5FADDF00ED4286 /* ContentView.swift */,
 				FAD3AD4F2A625B4000BEC69B /* CameraService.swift */,
 				FA569C032A63DF8800CFE693 /* ThumbnailView.swift */,
-				FA9F432C2A5FADE000ED4286 /* Assets.xcassets */,
-				FA9F432E2A5FADE000ED4286 /* Preview Content */,
 				FA9F43542A60046C00ED4286 /* call_c_bridge.h */,
 				FA9F43582A6026AF00ED4286 /* cpp_wrapper.cpp */,
+				FA9F432C2A5FADE000ED4286 /* Assets.xcassets */,
+				FA9F432E2A5FADE000ED4286 /* Preview Content */,
 			);
 			path = ModelIt;
 			sourceTree = "<group>";
@@ -506,6 +506,12 @@
 				DEVELOPMENT_TEAM = PTQHEM5K3R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/SoftVision\"",
+				);
+				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is needed to taking pictures.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use microphone to record sound";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Photo Library is needed for saving captured photos.";
@@ -550,6 +556,12 @@
 				DEVELOPMENT_TEAM = PTQHEM5K3R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/SoftVision\"",
+				);
+				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is needed to taking pictures.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use microphone to record sound";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Photo Library is needed for saving captured photos.";

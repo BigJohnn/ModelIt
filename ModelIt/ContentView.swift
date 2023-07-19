@@ -43,8 +43,7 @@ final class CameraModel: ObservableObject {
         .store(in: &self.subscriptions)
         
         /// Pipeline entrance
-        let pipeline = Pipeline_Create()
-        Pipeline_CameraInit(pipeline)
+        Pipeline_CameraInit()
         
     }
     
