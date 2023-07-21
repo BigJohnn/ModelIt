@@ -428,7 +428,8 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "-std=libstdc";
+				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = ModelIt/call_c_bridge.h;
@@ -484,7 +485,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_CFLAGS = "-std=libstdc";
+				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = ModelIt/call_c_bridge.h;
@@ -499,7 +501,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_CXX_LIBRARY = "$(inherited)";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ModelIt/Preview Content\"";
@@ -531,7 +534,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-l\"SoftVision\"",
 				);
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.letitbe.ModelIt;
@@ -549,7 +551,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_CXX_LIBRARY = "$(inherited)";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ModelIt/Preview Content\"";
@@ -581,7 +584,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-l\"SoftVision\"",
 				);
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.letitbe.ModelIt;

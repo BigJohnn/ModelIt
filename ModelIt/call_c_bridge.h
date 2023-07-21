@@ -16,6 +16,8 @@ typedef void* Pipeline;
 
 void Pipeline_CameraInit();
 
+//void LoadSfmDatafromSomeSwiftStuff(void* data);
+
 #ifdef __cplusplus
 }
 #endif
