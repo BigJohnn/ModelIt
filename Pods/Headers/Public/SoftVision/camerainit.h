@@ -1,1 +1,0 @@
-../../../../SoftVision/camerainit.h

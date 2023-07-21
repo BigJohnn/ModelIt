@@ -1,0 +1,8 @@
+/Pods/
+/build/
+Podfile.lock
+*.xcscheme
+*.xcworkspacedata
+*.plist
+*.xcsettings
+*.xcbkptlist
