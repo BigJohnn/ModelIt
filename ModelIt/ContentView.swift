@@ -89,6 +89,21 @@ struct CameraView: View {
         })
     }
     
+    var featureExtractButton: some View {
+        Button(action: {
+            Pipeline_FeatureExtraction()
+        }, label: {
+            Text("FeatureExtraction")
+                .foregroundColor(.white)
+                .frame(width: 80, height: 80, alignment: .center)
+//                .overlay(
+//                    Circle()
+//                        .stroke(Color.black.opacity(0.8), lineWidth: 2)
+//                        .frame(width: 65, height: 65, alignment: .center)
+//                )
+        })
+    }
+    
     var capturedPhotoThumbnail: some View {
         Group {
             if model.photo != nil {
@@ -136,7 +151,7 @@ struct CameraView: View {
                                         //  Calculate new zoom factor
                                         let calc = currentZoomFactor + percentage
                                         //  Limit zoom factor to a maximum of 5x and a minimum of 1x
-                                        let zoomFactor: CGFloat = min(max(calc, 1), 5)
+                                        let zoomFactor: CGFloat = 1//min(max(calc, 1), 5)
                                         //  Store the newly calculated zoom factor
                                         currentZoomFactor = zoomFactor
                                         //  Sets the zoom factor to the capture device session
@@ -171,6 +186,10 @@ struct CameraView: View {
                             Spacer()
                             
                             flipCameraButton
+                            
+                            Spacer()
+                            
+                            featureExtractButton
                             
                         }
                         .padding(.horizontal, 20)

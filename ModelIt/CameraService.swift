@@ -282,7 +282,13 @@ public class CameraService: NSObject, Identifiable {
             if let photoOutputConnection = self.photoOutput.connection(with: .video) {
                 photoOutputConnection.videoOrientation = videoPreviewLayerOrientation
             }
-            let photoSettings = AVCapturePhotoSettings()
+            
+            guard let availableRawFormat = self.photoOutput.availableRawPhotoPixelFormatTypes.first else {
+                        return
+                    }
+            
+            let photoSettings = AVCapturePhotoSettings(rawPixelFormatType: availableRawFormat,
+                                                       processedFormat: [AVVideoCodecKey : AVVideoCodecType.hevc])
             
             // Capture HEIF photos when supported. Enable according to user settings and high-resolution photos.
 //            if  self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {

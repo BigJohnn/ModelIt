@@ -8,25 +8,6 @@
 import SwiftUI
 import QuickLook
 
-func generateThumbnail(
-    size: CGSize,
-    scale: CGFloat,
-    completion: @escaping (UIImage) -> Void
-  ) {
-    if let thumbnail = UIImage(systemName: "doc") {
-      completion(thumbnail)
-    }
-  }
-
-enum Items: String, CaseIterable, Equatable {
-    case item1
-    case item2
-    case item3
-    case item4
-    case item5
-    case item6
-}
-
 struct ThumbnailView: View {
 //    @EnvironmentObject var model:CameraModel
     

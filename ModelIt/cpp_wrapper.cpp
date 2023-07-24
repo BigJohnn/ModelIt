@@ -7,7 +7,8 @@
 
 #include "call_c_bridge.h"
 #include "ReconPipeline.h"
-//#include "SfMData.hpp"
+#include <cstdio>
+
 void Pipeline_CameraInit()
 {
     ReconPipeline *p = ReconPipeline::GetInstance();
@@ -20,19 +21,17 @@ void Pipeline_AppendSfMData(uint32_t viewId,
                    uint32_t frameId,
                    uint32_t width,
                    uint32_t height,
-                   const char* metadata)
+                   const unsigned char* bufferData)
 {
     ReconPipeline *p = ReconPipeline::GetInstance();
-    p->AppendSfMData(viewId, poseId, intrinsicId, frameId, width, height, metadata);
+    p->AppendSfMData(viewId, poseId, intrinsicId, frameId, width, height, bufferData);
 }
 
-void Pipeline_FeatureExtraction(void* data)
+void Pipeline_FeatureExtraction()
 {
-//    printf("Pipeline_FeatureExtraction\n");
+    printf("Pipeline_FeatureExtraction\n");
     ReconPipeline *p = ReconPipeline::GetInstance();
-    
-    
-//    p->FeatureExtraction(reinterpret_cast<sfmData::SfMData*>(data));
+    p->FeatureExtraction();
     //
 }
 

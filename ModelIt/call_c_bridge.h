@@ -23,9 +23,10 @@ void Pipeline_AppendSfMData(uint32_t viewId,
                    uint32_t frameId,
                    uint32_t width,
                    uint32_t height,
-                    const char* metadata);
+                   const unsigned char* bufferData);
+
 //void LoadSfmDatafromSomeSwiftStuff(void* data);
-void Pipeline_FeatureExtraction(void* data);
+void Pipeline_FeatureExtraction();
 
 #ifdef __cplusplus
 }

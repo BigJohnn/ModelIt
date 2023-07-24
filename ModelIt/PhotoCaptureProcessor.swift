@@ -98,13 +98,21 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
             PhotoCaptureProcessor.frameId += 1
 //            PhotoCaptureProcessor.sfmData.append(item)
             
-            print("=====================================")
-            print(exif_table!["PixelXDimension"]!)
-            Pipeline_AppendSfMData(uuid,uuid,uuid,
-                                   UInt32(truncating: PhotoCaptureProcessor.frameId as NSNumber),
-                                   UInt32(truncating: exif_table!["PixelXDimension"]! as! NSNumber),
-                                   UInt32(truncating: exif_table!["PixelYDimension"]! as! NSNumber),
-                                   exif_table as Any as? UnsafePointer<CChar>)
+//            print("=====================================")
+//            print(exif_table!["PixelXDimension"]!)
+//            print("photodata == \(photoData)")
+            
+            if(photo.pixelBuffer != nil){
+                CVPixelBufferLockBaseAddress(photo.pixelBuffer!, .readOnly)
+                Pipeline_AppendSfMData(uuid,uuid,uuid,
+                                       UInt32(truncating: PhotoCaptureProcessor.frameId as NSNumber),
+                                       UInt32(truncating: exif_table!["PixelXDimension"]! as! NSNumber),
+                                       UInt32(truncating: exif_table!["PixelYDimension"]! as! NSNumber),
+                                       CVPixelBufferGetBaseAddress(photo.pixelBuffer!))
+                CVPixelBufferUnlockBaseAddress(photo.pixelBuffer!, .readOnly)
+                
+                Pipeline_FeatureExtraction()
+            }
         }
     }
 
