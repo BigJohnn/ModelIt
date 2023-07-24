@@ -85,22 +85,26 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
             print("PixelXDimension == \(String(describing: exif_table!["PixelXDimension"]))")
             print("PixelYDimension == \(String(describing: exif_table!["PixelYDimension"]))")
             
-            let uuid = UUID().uuidString
-            let item = [
-                "viewId":uuid,
-                "poseId":uuid,
-                "frameId":String(PhotoCaptureProcessor.frameId),
-                "data": photoData?.description as Any,
-                "width":String(describing: exif_table!["PixelXDimension"]!),
-                "height":String(describing: exif_table!["PixelYDimension"]!),
-                "metadata":exif_table as Any
-            ] as [String : Any]
+            let uuid = UInt32(truncatingIfNeeded: UUID().hashValue & LONG_MAX)
+//            let item = [
+//                "viewId":uuid,
+//                "poseId":uuid,
+//                "frameId":String(PhotoCaptureProcessor.frameId),
+//                "data": photoData?.description as Any,
+//                "width":String(describing: exif_table!["PixelXDimension"]!),
+//                "height":String(describing: exif_table!["PixelYDimension"]!),
+//                "metadata":exif_table as Any
+//            ] as [String : Any]
             PhotoCaptureProcessor.frameId += 1
-            PhotoCaptureProcessor.sfmData.append(item)
+//            PhotoCaptureProcessor.sfmData.append(item)
             
-            
-//            sfmData.append({"poseId":UUID().uuidString})
-//            print(photo.metadata)
+            print("=====================================")
+            print(exif_table!["PixelXDimension"]!)
+            Pipeline_AppendSfMData(uuid,uuid,uuid,
+                                   UInt32(truncating: PhotoCaptureProcessor.frameId as NSNumber),
+                                   UInt32(truncating: exif_table!["PixelXDimension"]! as! NSNumber),
+                                   UInt32(truncating: exif_table!["PixelYDimension"]! as! NSNumber),
+                                   exif_table as Any as? UnsafePointer<CChar>)
         }
     }
 

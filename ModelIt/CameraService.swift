@@ -312,7 +312,18 @@ public class CameraService: NSObject, Identifiable {
                     }
                     self.photoCache.append(self.photo?.compressedData ?? Data())
                     
+                    print("self.photoCache ==> ")
+                    print(self.photoCache)
+                    print(PhotoCaptureProcessor.sfmData)
+                    
+                    
                     //TODO: do something with this photo cache
+//                    let str = String(decoding: self.photoCache[0], as: UTF8.self)
+                    
+                    
+//                    let sfmData: SfMData
+//                    Pipeline_FeatureExtraction(UnsafeMutableRawPointer(mutating: self.photoCache))
+                    
                     
                 } else {
                     print("No photo data")
