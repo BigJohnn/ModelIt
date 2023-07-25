@@ -8,7 +8,7 @@
 #ifndef call_c_bridge_h
 #define call_c_bridge_h
 
-#include "stdint.h"
+#include <stdint.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

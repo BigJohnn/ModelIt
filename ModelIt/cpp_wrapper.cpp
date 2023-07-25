@@ -6,7 +6,7 @@
 //
 
 #include "call_c_bridge.h"
-#include "ReconPipeline.h"
+#include <ReconPipeline.h>
 #include <cstdio>
 
 void Pipeline_CameraInit()
