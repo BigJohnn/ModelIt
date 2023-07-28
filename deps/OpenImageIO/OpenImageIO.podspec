@@ -12,12 +12,13 @@ Pod::Spec.new do |spec|
 
   spec.source       = { :git => "https://github.com/OpenImageIO/oiio.git", :tag => "#{spec.version}" }
   spec.ios.deployment_target = "12.0"
-  spec.library  = "OpenImageIO*"
+  spec.libraries  = "OpenImageIO_d","OpenImageIO_Util_d"
 
   spec.source_files  = "include/**/**.{h,hpp}"
 
   spec.xcconfig = {
-  'HEADER_SEARCH_PATHS' => '${PROJECT_DIR}/../**'
+  'HEADER_SEARCH_PATHS' => '${PROJECT_DIR}/../**',
+  'LIBRARY_SEARCH_PATHS' => "$(SRCROOT)/deps/OpenImageIO/lib"
   }
 
 end
