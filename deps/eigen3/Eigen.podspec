@@ -14,6 +14,26 @@ Pod::Spec.new do |spec|
 
   spec.source       = { :git => "https://gitlab.com/libeigen/eigen.git", :tag => "#{spec.version}" }
   spec.ios.deployment_target = "12.0"
-  spec.source_files  = "**/**.{h,hpp}"
+#  spec.source_files  = "**/**.{h,hpp}"
+#  spec.source_files  = ""
+  spec.preserve_paths = './Eigen/**'
+  spec.compiler_flags = '-DEIGEN_MPL2_ONLY'
+  spec.header_mappings_dir = 'Eigen/*'
+  
+#  spec.preserve_paths = "Eigen/*","Eigen/**/*","unsupported/*","unsupported/**/*"
+  
+#  spec.header_dir = 'Eigen/*'
+#  spec.project_header_files = "'Eigen/src/*"
+  
+  spec.ios.resource_bundle = { 'Eigen' => 'Eigen/src' }
+  spec.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(inherited) "$(PODS_ROOT)/Eigen"' }
+  
+#  spec.resources = [
+#    "Eigen/*",
+#    "unsupported/Eigen/*"
+#  ]
+#  spec.public_header_files = [
+#  "Eigen/**"
+#  ]
 
 end
