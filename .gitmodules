@@ -1,0 +1,3 @@
+[submodule "deps/SoftVision"]
+	path = deps/SoftVision
+	url = git@github.com:BigJohnn/SoftVision.git
