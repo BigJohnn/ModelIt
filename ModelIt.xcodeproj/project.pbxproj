@@ -68,6 +68,9 @@
 		FAD3AD4D2A624FF500BEC69B /* PhotoCaptureProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCaptureProcessor.swift; sourceTree = "<group>"; };
 		FAD3AD4F2A625B4000BEC69B /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		FAD3AD512A625CFF00BEC69B /* CameraPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		FAF2667B2A96E7D700B98635 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		FAF2667D2A96E7F800B98635 /* libpng16d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16d.a; path = deps/libpng/lib/libpng16d.a; sourceTree = "<group>"; };
+		FAF2667F2A96E87300B98635 /* libz.1.2.11.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.11.tbd; path = usr/lib/libz.1.2.11.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +102,9 @@
 		3608D19EEE827D72D27E2F0F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FAF2667F2A96E87300B98635 /* libz.1.2.11.tbd */,
+				FAF2667D2A96E7F800B98635 /* libpng16d.a */,
+				FAF2667B2A96E7D700B98635 /* libz.tbd */,
 				FA6407D72A769FE600737E6C /* libOpenImageIO_d.a */,
 				FA6407D62A769FE600737E6C /* libOpenImageIO_Util_d.a */,
 				FA49A98E2A755094001E5A14 /* libOpenImageIO_d.2.5.2.dylib */,
@@ -563,6 +569,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/deps/OpenImageIO/lib",
+					"$(PROJECT_DIR)/deps/libpng/lib",
 				);
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MARKETING_VERSION = 1.0;
@@ -619,6 +626,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/deps/OpenImageIO/lib",
+					"$(PROJECT_DIR)/deps/libpng/lib",
 				);
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MARKETING_VERSION = 1.0;

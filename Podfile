@@ -13,5 +13,7 @@ target 'ModelIt' do
   
   pod 'VLFeat', :path => './deps/VLFeat'#, :inhibit_warnings => true
   
+  pod 'libpng', :path => './deps/libpng'
+  
 #  pod 'Eigen', '~> 3.4.0'
 end

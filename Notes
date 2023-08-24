@@ -4,3 +4,4 @@
 #   }
 #这里不要去搜eigen的头文件路径，否则会出Could not build module 'Darwin'
 PROJECT_DIR=>.xcodeproj的路径
+3.libpng编译时需要打开arm_neon: in CMakeLists.txt, do set(TARGET_ARCH arm64)
