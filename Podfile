@@ -15,5 +15,7 @@ target 'ModelIt' do
   
   pod 'libpng', :path => './deps/libpng'
   
+  pod 'libyuv', :path => './deps/libyuv'
+  
 #  pod 'Eigen', '~> 3.4.0'
 end
