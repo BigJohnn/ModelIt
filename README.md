@@ -1,2 +1,2 @@
 # ModelIt
-Captured photos to 3d digital models.
+Captured photos to textured 3d digital models.
