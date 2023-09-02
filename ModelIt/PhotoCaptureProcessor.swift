@@ -73,61 +73,68 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
 //        DispatchQueue.main.async {
 //            self.photoProcessingHandler(false)
 //        }
-        
-        if let error = error {
-            print("Error capturing photo: \(error)")
-        } else {
-            photoData = photo.fileDataRepresentation()
-            
-            let exif_table = photo.metadata["{Exif}"] as? [String:AnyObject]
-            print("FocalLength == \(String(describing: exif_table!["FocalLength"]))")
-            print("FNumber == \(String(describing: exif_table!["FNumber"]))")
-            print("PixelXDimension == \(String(describing: exif_table!["PixelXDimension"]))")
-            print("PixelYDimension == \(String(describing: exif_table!["PixelYDimension"]))")
-            
-            let uuid = UInt32(truncatingIfNeeded: UUID().hashValue & LONG_MAX)
-//            let item = [
-//                "viewId":uuid,
-//                "poseId":uuid,
-//                "frameId":String(PhotoCaptureProcessor.frameId),
-//                "data": photoData?.description as Any,
-//                "width":String(describing: exif_table!["PixelXDimension"]!),
-//                "height":String(describing: exif_table!["PixelYDimension"]!),
-//                "metadata":exif_table as Any
-//            ] as [String : Any]
-            PhotoCaptureProcessor.frameId += 1
-//            PhotoCaptureProcessor.sfmData.append(item)
-            
-//            print("=====================================")
-//            print(exif_table!["PixelXDimension"]!)
-//            print("photodata == \(photoData)")
-            
-            if(photo.pixelBuffer != nil){
-                CVPixelBufferLockBaseAddress(photo.pixelBuffer!, .readOnly)
-                Pipeline_AppendSfMData(uuid,uuid,uuid,
-                                       UInt32(truncating: PhotoCaptureProcessor.frameId as NSNumber),
-                                       UInt32(truncating: exif_table!["PixelXDimension"]! as! NSNumber),
-                                       UInt32(truncating: exif_table!["PixelYDimension"]! as! NSNumber),
-                                       CVPixelBufferGetBaseAddress(photo.pixelBuffer!))
-                CVPixelBufferUnlockBaseAddress(photo.pixelBuffer!, .readOnly)
+        DispatchQueue.main.async
+        {
+            if let error = error {
+                print("Error capturing photo: \(error)")
+            } else {
+                self.photoData = photo.fileDataRepresentation()
                 
-                let pixelBuf = photo.pixelBuffer!
+                let exif_table = photo.metadata["{Exif}"] as? [String:AnyObject]
+                print("FocalLength == \(String(describing: exif_table!["FocalLength"]))")
+                print("FNumber == \(String(describing: exif_table!["FNumber"]))")
+                print("PixelXDimension == \(String(describing: exif_table!["PixelXDimension"]))")
+                print("PixelYDimension == \(String(describing: exif_table!["PixelYDimension"]))")
                 
-//                var type = CVPixelBufferGetPixelFormatName(pixelBuf) as OSType;
+                let uuid = UInt32(truncatingIfNeeded: UUID().hashValue & LONG_MAX)
+    //            let item = [
+    //                "viewId":uuid,
+    //                "poseId":uuid,
+    //                "frameId":String(PhotoCaptureProcessor.frameId),
+    //                "data": photoData?.description as Any,
+    //                "width":String(describing: exif_table!["PixelXDimension"]!),
+    //                "height":String(describing: exif_table!["PixelYDimension"]!),
+    //                "metadata":exif_table as Any
+    //            ] as [String : Any]
+                PhotoCaptureProcessor.frameId += 1
+    //            PhotoCaptureProcessor.sfmData.append(item)
                 
-//                print("\(kCVPixelFormatType_32BGRA)")
-                print("pixeltype \(CVPixelBufferGetPixelFormatType(pixelBuf))")
-//                var name = CVPixelBufferGetPixelFormatName(pixelBuffer: pixelBuf)
-//                print("\(name)")
+    //            print("=====================================")
+    //            print(exif_table!["PixelXDimension"]!)
+    //            print("photodata == \(photoData)")
                 
-                print("w,h==\(CVPixelBufferGetWidth(pixelBuf)), \(CVPixelBufferGetHeight(pixelBuf))");
-                
-                let tmpDirURL = FileManager.default.temporaryDirectory
-                
-                Pipeline_SetOutputDataDir(tmpDirURL.absoluteString)
-                Pipeline_FeatureExtraction()
+                if(photo.pixelBuffer != nil){
+                    CVPixelBufferLockBaseAddress(photo.pixelBuffer!, .readOnly)
+                    
+                    
+                    Pipeline_AppendSfMData(uuid,uuid,uuid,
+                                           UInt32(truncating: PhotoCaptureProcessor.frameId as NSNumber),
+                                           UInt32(truncating: exif_table!["PixelXDimension"]! as! NSNumber),
+                                           UInt32(truncating: exif_table!["PixelYDimension"]! as! NSNumber),
+                                           CVPixelBufferGetBaseAddress(photo.pixelBuffer!))
+                    
+                    
+                    let pixelBuf = photo.pixelBuffer!
+                    
+    //                var type = CVPixelBufferGetPixelFormatName(pixelBuf) as OSType;
+                    
+    //                print("\(kCVPixelFormatType_32BGRA)")
+                    print("pixeltype \(CVPixelBufferGetPixelFormatType(pixelBuf))")
+    //                var name = CVPixelBufferGetPixelFormatName(pixelBuffer: pixelBuf)
+    //                print("\(name)")
+                    
+                    print("w,h==\(CVPixelBufferGetWidth(pixelBuf)), \(CVPixelBufferGetHeight(pixelBuf))");
+                    
+    //                let tmpDirURL = FileManager.default.temporaryDirectory
+    //
+    //                Pipeline_SetOutputDataDir(tmpDirURL.absoluteString)
+    //                Pipeline_FeatureExtraction()
+                    
+                    CVPixelBufferUnlockBaseAddress(photo.pixelBuffer!, .readOnly)
+                }
             }
         }
+        
     }
 
     fileprivate func saveToPhotoLibrary(_ photoData: Data) {

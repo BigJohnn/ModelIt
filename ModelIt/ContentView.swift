@@ -91,6 +91,9 @@ struct CameraView: View {
     
     var featureExtractButton: some View {
         Button(action: {
+            let tmpDirURL = FileManager.default.temporaryDirectory
+            
+            Pipeline_SetOutputDataDir(tmpDirURL.absoluteString)
             Pipeline_FeatureExtraction()
         }, label: {
             Text("FeatureExtraction")
