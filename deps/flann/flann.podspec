@@ -13,8 +13,12 @@ Pod::Spec.new do |spec|
   spec.source       = { :http => "http://people.cs.ubc.ca/~mariusm/uploads/FLANN/flann-1.8.4-src.zip" }
   spec.ios.deployment_target = "11.0"
   
-  spec.source_files = "src/cpp/**/**.{h}"
+  spec.source_files = "src/cpp/**/**"
   
-  spec.header_dir = 'src/cpp'
+  spec.exclude_files = "**/*.txt","src/cpp/flann/mpi/*{server,client}.cpp"
+#  spec.public_header_files = 'Headers/Public/**/*.hpp'
+  spec.header_dir = '.'
+  
+  spec.header_mappings_dir = 'src/cpp/flann'
 
 end

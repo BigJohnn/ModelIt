@@ -6,6 +6,8 @@ install! 'cocoapods', :deterministic_uuids => false
 target 'ModelIt' do
   pod 'SoftVision', :path => './deps/SoftVision', :inhibit_warnings => true
   
+  pod 'openmp', :path => './deps/openmp', :inhibit_warnings => true
+  
   pod 'flann', :path => './deps/flann', :inhibit_warnings => true
 #
   pod 'Eigen', :path => './deps/eigen3'#, :inhibit_warnings => true
