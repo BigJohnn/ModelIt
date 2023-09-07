@@ -21,5 +21,7 @@ target 'ModelIt' do
   
   pod 'libyuv', :path => './deps/libyuv'
   
+  pod 'lemon', :path => './deps/lemon'
+  
 #  pod 'Eigen', '~> 3.4.0'
 end
