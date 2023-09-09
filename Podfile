@@ -9,6 +9,8 @@ target 'ModelIt' do
   pod 'openmp', :path => './deps/openmp', :inhibit_warnings => true
   
   pod 'flann', :path => './deps/flann', :inhibit_warnings => true
+  
+  pod 'lemon', :path => './deps/lemon'
 #
   pod 'Eigen', :path => './deps/eigen3'#, :inhibit_warnings => true
 ##  pod 'OpenImageIO', :path => './deps/OpenImageIO', :inhibit_warnings => true
@@ -21,7 +23,7 @@ target 'ModelIt' do
   
   pod 'libyuv', :path => './deps/libyuv'
   
-  pod 'lemon', :path => './deps/lemon'
+  
   
 #  pod 'Eigen', '~> 3.4.0'
 end

@@ -13,12 +13,13 @@ Pod::Spec.new do |spec|
   spec.source       = { :http => "http://lemon.cs.elte.hu/trac/lemon" }
   spec.ios.deployment_target = "11.0"
   
-  spec.source_files = "lemon/**/*.{h,cc}"
+  spec.source_files = "**/**.{h}"
+  # spec.public_header_files = "**/**.{h}"
+  spec.ios.vendored_library = 'lib/liblemon.a'
+  spec.libraries = 'z'
   
-  # spec.exclude_files = "**/*.txt","src/cpp/flann/mpi/*{server,client}.cpp"
-#  spec.public_header_files = 'Headers/Public/**/*.hpp'
   spec.header_dir = './lemon'
   
   spec.header_mappings_dir = 'lemon'
-
+  spec.libraries = 'stdc++'
 end
