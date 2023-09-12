@@ -28,7 +28,7 @@ void Pipeline_AppendSfMData(uint32_t viewId,
 void Pipeline_SetOutputDataDir(const char *directory);
 
 void Pipeline_FeatureExtraction();
-
+void Pipeline_FeatureMatching();
 #ifdef __cplusplus
 }
 #endif

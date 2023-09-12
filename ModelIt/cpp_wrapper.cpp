@@ -58,4 +58,9 @@ void Pipeline_FeatureExtraction()
     //
 }
 
-
+void Pipeline_FeatureMatching()
+{
+    printf("Pipeline_FeatureMatching\n");
+    p.FeatureMatching();
+    //
+}

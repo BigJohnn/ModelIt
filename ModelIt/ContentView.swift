@@ -95,6 +95,9 @@ struct CameraView: View {
         Button(action: {
             
             Pipeline_FeatureExtraction()
+            
+            Pipeline_FeatureMatching()
+            
         }, label: {
             Text("FeatureExtraction")
                 .foregroundColor(.white)

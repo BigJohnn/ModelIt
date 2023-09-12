@@ -15,8 +15,9 @@ Pod::Spec.new do |spec|
   
   spec.source_files = "include/**/**.{h}"
   # spec.public_header_files = "**/**.{h}"
-  spec.ios.vendored_library = 'lib/libceres.a'
+  spec.ios.vendored_library = 'lib/libceres.a', 'lib/libglogbase.a'
   
+  spec.ios.frameworks = 'Accelerate'
 #  spec.header_dir = './include'
   
   spec.header_mappings_dir = 'include'
