@@ -17,11 +17,13 @@ target 'ModelIt' do
 #
 #  pod 'test', :path => './deps/test'#, :inhibit_warnings => true
   
-  pod 'VLFeat', :path => './deps/VLFeat'#, :inhibit_warnings => true
+  pod 'VLFeat', :path => './deps/VLFeat', :inhibit_warnings => true
   
   pod 'libpng', :path => './deps/libpng'
   
   pod 'libyuv', :path => './deps/libyuv'
+  
+  pod 'Ceres', :path => './deps/Ceres'
   
   
   

@@ -81,7 +81,7 @@ the terms of the BSD license (see the COPYING file).
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h> /* memset */
-#include "assert.h"
+//#include "assert.h"
 
 static void vl_ikm_init_lloyd (VlIKMFilt*) ;
 static void vl_ikm_init_elkan (VlIKMFilt*) ;

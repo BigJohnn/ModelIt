@@ -5,3 +5,18 @@
 #这里不要去搜eigen的头文件路径，否则会出Could not build module 'Darwin'
 PROJECT_DIR=>.xcodeproj的路径
 3.libpng编译时需要打开arm_neon: in CMakeLists.txt, do set(TARGET_ARCH arm64)
+4.关于各依赖库ios平台交叉编译：一般需要在每个库的CMakeLists.txt中添加以下代码：
+set(CMAKE_C_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang)
+set(CMAKE_CXX_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++)
+set(IOS_ARCH arm64)
+
+set(CMAKE_TOOLCHAIN_FILE ~/Codes/ios.toolchain.cmake)
+set(IOS_PLATFORM OS64COMBINE)
+
+set(CMAKE_SYSTEM_NAME iOS)
+set(CMAKE_SYSTEM_VERSION 16.4)
+
+set(IOS_DEPLOYMENT_TARGET 11.0)
+
+然后
+cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=~/Codes/ios.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./build/install -DIOS_PLATFORM=OS64COMBINE -DIOS_ARCH="arm64;arm64e" -DCMAKE_SYSTEM=iOS-16.4
