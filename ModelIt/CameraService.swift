@@ -333,9 +333,10 @@ public class CameraService: NSObject, Identifiable {
                     }
                     self.photoCache.append(self.photo?.compressedData ?? Data())
                     
-                    print("self.photoCache ==> ")
-                    print(self.photoCache)
-                    print(PhotoCaptureProcessor.sfmData)
+                    print("Capture photo ... done!")
+//                    print("self.photoCache ==> ")
+//                    print(self.photoCache)
+//                    print(PhotoCaptureProcessor.sfmData)
                     
                     
                     //TODO: do something with this photo cache

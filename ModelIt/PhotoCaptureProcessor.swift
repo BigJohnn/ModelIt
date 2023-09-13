@@ -106,8 +106,8 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
                 if(photo.pixelBuffer != nil){
                     CVPixelBufferLockBaseAddress(photo.pixelBuffer!, .readOnly)
                     
-                    
-                    Pipeline_AppendSfMData(uuid,uuid,uuid,
+                    //for single cam case, use the same intrinsic id
+                    Pipeline_AppendSfMData(uuid,uuid,0,
                                            UInt32(truncating: PhotoCaptureProcessor.frameId as NSNumber),
                                            UInt32(truncating: exif_table!["PixelXDimension"]! as! NSNumber),
                                            UInt32(truncating: exif_table!["PixelYDimension"]! as! NSNumber),
