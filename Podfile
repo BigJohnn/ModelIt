@@ -25,6 +25,8 @@ target 'ModelIt' do
   
   pod 'Ceres', :path => './deps/Ceres'
   
+  pod 'cJSON', :path => './deps/cJSON'
+  
   
   
 #  pod 'Eigen', '~> 3.4.0'
