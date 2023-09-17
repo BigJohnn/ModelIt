@@ -44,9 +44,25 @@ final class CameraModel: ObservableObject {
         
         /// Pipeline entrance
         Pipeline_CameraInit()
-        let tmpDirURL = FileManager.default.temporaryDirectory
-        Pipeline_SetOutputDataDir(tmpDirURL.absoluteString)
         
+        let path = FileManager.default.temporaryDirectory.path()
+        Pipeline_SetOutputDataDir(path)
+
+        clearCache(directory: path)
+    }
+    
+    func clearCache(directory:String) {
+        do {
+            print("Clearing cache in \(directory) ...")
+            let childerFiles = try FileManager.default.subpathsOfDirectory(atPath: directory)
+            for fname in childerFiles {
+                try FileManager.default.removeItem(atPath: directory + fname)
+            }
+            print(childerFiles)
+            print("done!")
+        } catch let err {
+           print("Error found: \(err)")
+        }
     }
     
     func configure() {

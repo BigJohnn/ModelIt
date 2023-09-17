@@ -14,7 +14,7 @@ Pod::Spec.new do |spec|
   
   spec.source_files = "include/**.{h}"
   spec.public_header_files = "include/**.{h}"
-  spec.ios.vendored_library = 'cJSON.a'
+  spec.ios.vendored_library = 'lib/libcjson.a'
   
   spec.header_mappings_dir = 'include'
 
