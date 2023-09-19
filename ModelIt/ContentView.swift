@@ -47,8 +47,6 @@ final class CameraModel: ObservableObject {
         
         let path = FileManager.default.temporaryDirectory.path()
         Pipeline_SetOutputDataDir(path)
-
-        clearCache(directory: path)
     }
     
     func clearCache(directory:String) {
@@ -104,6 +102,23 @@ struct CameraView: View {
                         .stroke(Color.black.opacity(0.8), lineWidth: 2)
                         .frame(width: 65, height: 65, alignment: .center)
                 )
+        })
+    }
+    
+    var cacheClearButton: some View {
+        Button(action: {
+            let path = FileManager.default.temporaryDirectory.path()
+            model.clearCache(directory: path)
+            
+        }, label: {
+            Text("Clear Cache")
+                .foregroundColor(.white)
+                .frame(width: 80, height: 80, alignment: .center)
+//                .overlay(
+//                    Circle()
+//                        .stroke(Color.black.opacity(0.8), lineWidth: 2)
+//                        .frame(width: 65, height: 65, alignment: .center)
+//                )
         })
     }
     
@@ -204,6 +219,10 @@ struct CameraView: View {
                             Spacer()
                             
                             captureButton
+                            
+                            Spacer()
+                            
+                            cacheClearButton
                             
                             Spacer()
                             
