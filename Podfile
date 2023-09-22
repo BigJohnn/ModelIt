@@ -4,6 +4,10 @@ platform :ios, '12.0'
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'ModelIt' do
+  pod 'glog', :path => './deps/glog'
+  
+#  pod 'coin', :path => './deps/coin'
+  
   pod 'SoftVision', :path => './deps/SoftVision', :inhibit_warnings => true
   
   pod 'openmp', :path => './deps/openmp', :inhibit_warnings => true

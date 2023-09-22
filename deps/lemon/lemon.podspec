@@ -14,12 +14,14 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = "11.0"
   
   spec.source_files = "**/**.{h}"
-  # spec.public_header_files = "**/**.{h}"
+  spec.public_header_files = "**/**.{h}"
+   
   spec.ios.vendored_library = 'lib/liblemon.a'
   spec.libraries = 'z'
   
-  spec.header_dir = './lemon'
   
-  spec.header_mappings_dir = 'lemon'
+#  spec.header_dir = './lemon'
+  
+  spec.header_mappings_dir = 'include'
   spec.libraries = 'stdc++'
 end
