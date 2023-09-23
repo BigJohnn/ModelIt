@@ -184,9 +184,9 @@ struct CameraView: View {
                                     //  Only accept vertical drag
                                     if abs(val.translation.height) > abs(val.translation.width) {
                                         //  Get the percentage of vertical screen space covered by drag
-                                        let percentage: CGFloat = -(val.translation.height / reader.size.height)
+//                                        let percentage: CGFloat = -(val.translation.height / reader.size.height)
                                         //  Calculate new zoom factor
-                                        let calc = currentZoomFactor + percentage
+//                                        let calc = currentZoomFactor + percentage
                                         //  Limit zoom factor to a maximum of 5x and a minimum of 1x
                                         let zoomFactor: CGFloat = 1//min(max(calc, 1), 5)
                                         //  Store the newly calculated zoom factor

@@ -176,14 +176,14 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
         }
         
         DispatchQueue.main.async {
-            let bSaveToLibrary = false;
-            if(bSaveToLibrary) {
-                self.completionHandler(self)
-            }
-            else {
+//            let bSaveToLibrary = false;
+//            if(bSaveToLibrary) {
+//                self.completionHandler(self)
+//            }
+//            else {
                 let photo = Photo(originalData: self.photoData!)
                 self.saveToPhotoLibrary(photo.compressedData!)
-            }
+//            }
         }
     }
 }

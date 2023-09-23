@@ -46,7 +46,11 @@ public class CameraService: NSObject, Identifiable {
     // Communicate with the session and other session objects on this queue.
     let sessionQueue = DispatchQueue(label: "session queue")
     
-    @objc dynamic var videoDeviceInput: AVCaptureDeviceInput!
+    @objc dynamic var videoDeviceInput: AVCaptureDeviceInput?
+//    @objc dynamic var videoDeviceInput = AVCaptureDeviceInput
+    
+    var isSessionRunning = false
+    
     // MARK: Device Configuration Properties
     let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera, .builtInTrueDepthCamera], mediaType: .video, position: .unspecified)
     
@@ -60,7 +64,8 @@ public class CameraService: NSObject, Identifiable {
 //    var photoCaptureProcessor:PhotoCaptureProcessor
     
     public func configure() {
-//        if !self.isSessionRunning && !self.isConfigured {
+        
+        if !self.isSessionRunning/* && !self.isConfigured*/ {
             /*
              Setup the capture session.
              In general, it's not safe to mutate an AVCaptureSession or any of its
@@ -71,10 +76,11 @@ public class CameraService: NSObject, Identifiable {
              take a long time. Dispatch session setup to the sessionQueue, so
              that the main queue isn't blocked, which keeps the UI responsive.
              */
+//            print(self.videoDeviceInput)
             sessionQueue.async {
                 self.configureSession()
             }
-//        }
+        }
     }
     
     // Call this on the session queue.
@@ -123,6 +129,15 @@ public class CameraService: NSObject, Identifiable {
             
             if session.canAddInput(videoDeviceInput) {
                 session.addInput(videoDeviceInput)
+                
+                print(isSessionRunning)
+                print(videoDeviceInput)
+                print(self.videoDeviceInput ?? nil)
+//                if(nil != self.videoDeviceInput) {
+//                    self.videoDeviceInput = nil
+//                }
+//                videoDeviceInputX = videoDeviceInput
+                
                 self.videoDeviceInput = videoDeviceInput
                 
             } else {
@@ -168,7 +183,7 @@ public class CameraService: NSObject, Identifiable {
 //        //
         
         sessionQueue.async {
-            let currentVideoDevice = self.videoDeviceInput.device
+            let currentVideoDevice = self.videoDeviceInput!.device
             let currentPosition = currentVideoDevice.position
             
             let preferredPosition: AVCaptureDevice.Position
@@ -206,7 +221,7 @@ public class CameraService: NSObject, Identifiable {
                     
                     // Remove the existing device input first, because AVCaptureSession doesn't support
                     // simultaneous use of the rear and front cameras.
-                    self.session.removeInput(self.videoDeviceInput)
+                    self.session.removeInput(self.videoDeviceInput!)
                     
                     if self.session.canAddInput(videoDeviceInput) {
                         NotificationCenter.default.removeObserver(self, name: .AVCaptureDeviceSubjectAreaDidChange, object: currentVideoDevice)
@@ -215,7 +230,7 @@ public class CameraService: NSObject, Identifiable {
                         self.session.addInput(videoDeviceInput)
                         self.videoDeviceInput = videoDeviceInput
                     } else {
-                        self.session.addInput(self.videoDeviceInput)
+                        self.session.addInput(self.videoDeviceInput!)
                     }
                     
                     if let connection = self.photoOutput.connection(with: .video) {
@@ -240,11 +255,12 @@ public class CameraService: NSObject, Identifiable {
     }
     
     @objc public func start() {
+        print(self.videoDeviceInput)
         sessionQueue.async {
 //            self.addObservers()
             self.session.startRunning()
 //            print("CAMERA RUNNING")
-//            self.isSessionRunning = self.session.isRunning
+            self.isSessionRunning = self.session.isRunning
             
 //            if self.session.isRunning {
 //                DispatchQueue.main.async {
@@ -257,7 +273,7 @@ public class CameraService: NSObject, Identifiable {
     
     public func set(zoom: CGFloat){
         let factor = zoom < 1 ? 1 : zoom
-        let device = self.videoDeviceInput.device
+        let device = self.videoDeviceInput!.device
         
         do {
             try device.lockForConfiguration()
