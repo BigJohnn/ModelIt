@@ -37,8 +37,14 @@ extension Photo {
     }
 }
 
+//dynamic var videoDeviceInputX: AVCaptureDeviceInput?
+
 public class CameraService: NSObject, Identifiable {
     typealias PhotoCaptureSessionID = String
+    
+    
+    
+    
     @Published public var photo: Photo?
     @Published public var willCapturePhoto = false
     
@@ -46,8 +52,9 @@ public class CameraService: NSObject, Identifiable {
     // Communicate with the session and other session objects on this queue.
     let sessionQueue = DispatchQueue(label: "session queue")
     
-    @objc dynamic var videoDeviceInput: AVCaptureDeviceInput?
-//    @objc dynamic var videoDeviceInput = AVCaptureDeviceInput
+    
+    @objc dynamic var videoDeviceInput: AVCaptureDeviceInput? //TODO: check, remove this will be crash, why?
+    @objc dynamic var videoDeviceInput2: AVCaptureDeviceInput?
     
     var isSessionRunning = false
     
@@ -130,15 +137,17 @@ public class CameraService: NSObject, Identifiable {
             if session.canAddInput(videoDeviceInput) {
                 session.addInput(videoDeviceInput)
                 
-                print(isSessionRunning)
-                print(videoDeviceInput)
-                print(self.videoDeviceInput ?? nil)
+//                print(isSessionRunning)
+//                print(videoDeviceInput)
+//                print(self.videoDeviceInput ?? nil)
 //                if(nil != self.videoDeviceInput) {
 //                    self.videoDeviceInput = nil
 //                }
 //                videoDeviceInputX = videoDeviceInput
-                
-                self.videoDeviceInput = videoDeviceInput
+//                                print(videoDeviceInputX)
+//                print(self.photox)
+//                self.videoDeviceInput = videoDeviceInput
+                self.videoDeviceInput2 = videoDeviceInput
                 
             } else {
                 print("Couldn't add video device input to the session.")
@@ -183,7 +192,7 @@ public class CameraService: NSObject, Identifiable {
 //        //
         
         sessionQueue.async {
-            let currentVideoDevice = self.videoDeviceInput!.device
+            let currentVideoDevice = self.videoDeviceInput2!.device
             let currentPosition = currentVideoDevice.position
             
             let preferredPosition: AVCaptureDevice.Position
@@ -221,15 +230,18 @@ public class CameraService: NSObject, Identifiable {
                     
                     // Remove the existing device input first, because AVCaptureSession doesn't support
                     // simultaneous use of the rear and front cameras.
-                    self.session.removeInput(self.videoDeviceInput!)
                     
+                    self.session.removeInput(self.videoDeviceInput2!)
                     if self.session.canAddInput(videoDeviceInput) {
+                        
+                        
                         NotificationCenter.default.removeObserver(self, name: .AVCaptureDeviceSubjectAreaDidChange, object: currentVideoDevice)
 //                        NotificationCenter.default.addObserver(self, selector: #selector(self.subjectAreaDidChange), name: .AVCaptureDeviceSubjectAreaDidChange, object: videoDeviceInput.device)
                         
                         self.session.addInput(videoDeviceInput)
-                        self.videoDeviceInput = videoDeviceInput
-                    } else {
+                        self.videoDeviceInput2 = videoDeviceInput
+                    }
+                    else {
                         self.session.addInput(self.videoDeviceInput!)
                     }
                     
@@ -255,7 +267,7 @@ public class CameraService: NSObject, Identifiable {
     }
     
     @objc public func start() {
-        print(self.videoDeviceInput)
+//        assert(self.videoDeviceInput == nil)
         sessionQueue.async {
 //            self.addObservers()
             self.session.startRunning()
@@ -271,19 +283,19 @@ public class CameraService: NSObject, Identifiable {
         }
     }
     
-    public func set(zoom: CGFloat){
-        let factor = zoom < 1 ? 1 : zoom
-        let device = self.videoDeviceInput!.device
-        
-        do {
-            try device.lockForConfiguration()
-            device.videoZoomFactor = factor
-            device.unlockForConfiguration()
-        }
-        catch {
-            print(error.localizedDescription)
-        }
-    }
+//    public func set(zoom: CGFloat){
+//        let factor = zoom < 1 ? 1 : zoom
+//        let device = self.videoDeviceInput!.device
+//
+//        do {
+//            try device.lockForConfiguration()
+//            device.videoZoomFactor = factor
+//            device.unlockForConfiguration()
+//        }
+//        catch {
+//            print(error.localizedDescription)
+//        }
+//    }
     
     //    MARK: Capture Photo
     

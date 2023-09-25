@@ -54,7 +54,7 @@ final class CameraModel: ObservableObject {
             print("Clearing cache in \(directory) ...")
             let childerFiles = try FileManager.default.subpathsOfDirectory(atPath: directory)
             for fname in childerFiles {
-                try FileManager.default.removeItem(atPath: directory + fname)
+                try FileManager.default.removeItem(atPath: directory + fname) //TODO: check
             }
             print(childerFiles)
             print("done!")
@@ -78,9 +78,9 @@ final class CameraModel: ObservableObject {
         service.changeCamera()
     }
     
-    func zoom(with factor: CGFloat) {
-        service.set(zoom: factor)
-    }
+//    func zoom(with factor: CGFloat) {
+//        service.set(zoom: factor)
+//    }
 }
 
 struct CameraView: View {
@@ -128,6 +128,8 @@ struct CameraView: View {
             Pipeline_FeatureExtraction()
             
             Pipeline_FeatureMatching()
+            
+            Pipeline_SFM()
             
         }, label: {
             Text("FeatureExtraction")
@@ -188,11 +190,11 @@ struct CameraView: View {
                                         //  Calculate new zoom factor
 //                                        let calc = currentZoomFactor + percentage
                                         //  Limit zoom factor to a maximum of 5x and a minimum of 1x
-                                        let zoomFactor: CGFloat = 1//min(max(calc, 1), 5)
-                                        //  Store the newly calculated zoom factor
-                                        currentZoomFactor = zoomFactor
-                                        //  Sets the zoom factor to the capture device session
-                                        model.zoom(with: zoomFactor)
+//                                        let zoomFactor: CGFloat = 1//min(max(calc, 1), 5)
+//                                        //  Store the newly calculated zoom factor
+//                                        currentZoomFactor = zoomFactor
+//                                        //  Sets the zoom factor to the capture device session
+//                                        model.zoom(with: zoomFactor)
                                     }
                                 })
                             )

@@ -64,3 +64,9 @@ void Pipeline_FeatureMatching()
     p.FeatureMatching();
     //
 }
+
+void Pipeline_SFM()
+{
+    p.IncrementalSFM();
+    //
+}

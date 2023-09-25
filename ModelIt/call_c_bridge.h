@@ -29,6 +29,7 @@ void Pipeline_SetOutputDataDir(const char *directory);
 
 void Pipeline_FeatureExtraction();
 void Pipeline_FeatureMatching();
+void Pipeline_SFM();
 #ifdef __cplusplus
 }
 #endif
