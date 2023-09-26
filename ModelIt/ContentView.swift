@@ -54,7 +54,12 @@ final class CameraModel: ObservableObject {
             print("Clearing cache in \(directory) ...")
             let childerFiles = try FileManager.default.subpathsOfDirectory(atPath: directory)
             for fname in childerFiles {
-                try FileManager.default.removeItem(atPath: directory + fname) //TODO: check
+                if(FileManager.default.isDeletableFile(atPath: directory + fname)) {
+                    try FileManager.default.removeItem(atPath: directory + fname) //TODO: check
+                }
+                else {
+                    clearCache(directory:directory + fname)
+                }
             }
             print(childerFiles)
             print("done!")
