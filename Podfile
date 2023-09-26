@@ -6,6 +6,7 @@ install! 'cocoapods', :deterministic_uuids => false
 target 'ModelIt' do
   pod 'glog', :path => './deps/glog'
   
+  pod 'Alembic', :path => './deps/Alembic'
 #  pod 'coin', :path => './deps/coin'
   
   pod 'SoftVision', :path => './deps/SoftVision', :inhibit_warnings => true

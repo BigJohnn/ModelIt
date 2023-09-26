@@ -20,3 +20,13 @@ set(IOS_DEPLOYMENT_TARGET 11.0)
 
 然后
 cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=~/Codes/ios.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./build/install -DIOS_PLATFORM=OS64COMBINE -DIOS_ARCH="arm64;arm64e" -DCMAKE_SYSTEM=iOS-16.4
+
+
+5.关于依赖库的符号解析：
+nm -A /Users/hph/Codes/alembic-1.8.5/build/lib/Alembic/Release-iphoneos/libAlembic.1.8.5.a | grep WriteArchive   
+/Users/hph/Codes/alembic-1.8.5/build/lib/Alembic/Release-iphoneos/libAlembic.1.8.5.a:ReadWrite.o: 0000000000000004 T __ZN7Alembic12AbcCoreOgawa3v1212WriteArchiveC1Ev
+/Users/hph/Codes/alembic-1.8.5/build/lib/Alembic/Release-iphoneos/libAlembic.1.8.5.a:ReadWrite.o: 0000000000000000 T __ZN7Alembic12AbcCoreOgawa3v1212WriteArchiveC2Ev
+使用如下命令还原符号：
+c++filt __ZN7Alembic12AbcCoreOgawa3v1212WriteArchiveC2Ev
+Alembic::AbcCoreOgawa::v12::WriteArchive::WriteArchive()
+
