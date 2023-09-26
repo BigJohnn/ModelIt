@@ -12,9 +12,9 @@ Pod::Spec.new do |spec|
   spec.source       = { :http => "https://github.com/alembic/alembic.git" }
   spec.ios.deployment_target = "11.0"
   
-  spec.source_files = "include/**/**.{h, cpp}"
+  spec.source_files = "include/**/**.{h}"
 
-#  spec.ios.vendored_library =  'lib/libAlembic.a'
+ spec.ios.vendored_library =  'lib/libAlembic.a', 'lib/libImath-3_1_d.29.8.0.a'
   
   spec.header_mappings_dir = 'include'
   spec.libraries = 'stdc++'
