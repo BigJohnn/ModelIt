@@ -14,7 +14,7 @@ Pod::Spec.new do |spec|
   
   spec.source_files = "include/**/**.{h}"
 
- spec.ios.vendored_library =  'lib/libAlembic.a', 'lib/libImath-3_1_d.29.8.0.a'
+  spec.ios.vendored_library =  'lib/libAlembic.a', 'lib/libImath-3_1_d.29.8.0.a'
   
   spec.header_mappings_dir = 'include'
   spec.libraries = 'stdc++'

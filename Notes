@@ -30,3 +30,9 @@ nm -A /Users/hph/Codes/alembic-1.8.5/build/lib/Alembic/Release-iphoneos/libAlemb
 c++filt __ZN7Alembic12AbcCoreOgawa3v1212WriteArchiveC2Ev
 Alembic::AbcCoreOgawa::v12::WriteArchive::WriteArchive()
 
+6.OpenImageIO
+Xcode=>BuildSettings=>Implicit Conversion to 32 Bit Type(No)
+
+7.OpenExr
+a.cmake中设置option(BUILD_SHARED_LIBS "Build shared library" OFF)
+b.xcode build 一下targets中的install, 删掉报错的无关targets

@@ -610,7 +610,7 @@ STATIC_INLINE uint64_t HashLen16(uint64_t u, uint64_t v, uint64_t mul) {
   return b;
 }
 
-STATIC_INLINE uint64_t HashLen0to16(const char *s, size_t len) {
+STATIC_INLINE uint64_t HashLen0to16(const char *s, uint32_t len) {
   if (len >= 8) {
     uint64_t mul = inlined::k2 + len * 2;
     uint64_t a = Fetch(s) + inlined::k2;
@@ -1220,7 +1220,7 @@ STATIC_INLINE uint32_t Hash32Len13to24(const char *s, size_t len, uint32_t seed 
   return fmix(h);
 }
 
-STATIC_INLINE uint32_t Hash32Len0to4(const char *s, size_t len, uint32_t seed = 0) {
+STATIC_INLINE uint32_t Hash32Len0to4(const char *s, uint32_t len, uint32_t seed = 0) {
   uint32_t b = seed;
   uint32_t c = 9;
   for (size_t i = 0; i < len; i++) {

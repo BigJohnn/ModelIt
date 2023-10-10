@@ -70,3 +70,8 @@ void Pipeline_SFM()
     p.IncrementalSFM();
     //
 }
+
+void Pipeline_PrepareDenseScene()
+{
+    p.PrepareDenseScene();
+}

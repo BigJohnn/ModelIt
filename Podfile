@@ -18,7 +18,8 @@ target 'ModelIt' do
   pod 'lemon', :path => './deps/lemon'
 #
   pod 'Eigen', :path => './deps/eigen3'#, :inhibit_warnings => true
-##  pod 'OpenImageIO', :path => './deps/OpenImageIO', :inhibit_warnings => true
+  
+  pod 'OpenImageIO', :path => './deps/OpenImageIO', :inhibit_warnings => true
 #
 #  pod 'test', :path => './deps/test'#, :inhibit_warnings => true
   

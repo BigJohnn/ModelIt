@@ -136,6 +136,8 @@ struct CameraView: View {
             
             Pipeline_SFM()
             
+            Pipeline_PrepareDenseScene()
+            
         }, label: {
             Text("FeatureExtraction")
                 .foregroundColor(.white)
