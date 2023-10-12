@@ -26,12 +26,12 @@ void Pipeline_AppendSfMData(uint32_t viewId,
                    const unsigned char* bufferData);
 
 void Pipeline_SetOutputDataDir(const char *directory);
-
 void Pipeline_FeatureExtraction();
 void Pipeline_FeatureMatching();
 void Pipeline_SFM();
-
 void Pipeline_PrepareDenseScene();
+void Pipeline_DepthMapEstimation();
+
 #ifdef __cplusplus
 }
 #endif

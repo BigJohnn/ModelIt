@@ -75,3 +75,8 @@ void Pipeline_PrepareDenseScene()
 {
     p.PrepareDenseScene();
 }
+
+void Pipeline_DepthMapEstimation()
+{
+    p.DepthMapEstimation();
+}
