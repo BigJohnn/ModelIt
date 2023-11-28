@@ -58,7 +58,7 @@ Pod::Spec.new do |spec|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-   spec.ios.deployment_target = "11.0"
+   spec.ios.deployment_target = "12.0"
   spec.source       = { :git => "https://github.com/BigJohnn/SoftVision.git", :tag => "#{spec.version}"}
 
 

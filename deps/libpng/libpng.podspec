@@ -11,7 +11,7 @@ Pod::Spec.new do |spec|
   }
 
   spec.source       = { :http => "https://sourceforge.net/projects/libpng/files/libpng16/1.6.40" }
-  spec.ios.deployment_target = "11.0"
+  spec.ios.deployment_target = "12.0"
   
   spec.source_files = "**/**.{h}"
   spec.public_header_files = "**/**.{h}"

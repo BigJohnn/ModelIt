@@ -1474,7 +1474,7 @@ struct _VlCovDet
   vl_size numFeatures ;
   vl_size numFeatureBufferSize ;
 
-  //float * patch ; // AliceVision: moved as external variable to allow multithreading
+  //float * patch ; // SoftVision: moved as external variable to allow multithreading
   //vl_size patchBufferSize ;
 
   vl_bool transposed ;

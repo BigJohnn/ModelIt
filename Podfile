@@ -9,7 +9,6 @@ target 'ModelIt' do
   pod 'Alembic', :path => './deps/Alembic'
   
   pod 'assimp', :path => './deps/assimp'
-#  pod 'coin', :path => './deps/coin'
   
   pod 'SoftVision', :path => './deps/SoftVision', :inhibit_warnings => true
   
@@ -34,8 +33,4 @@ target 'ModelIt' do
   pod 'Ceres', :path => './deps/Ceres'
   
   pod 'cJSON', :path => './deps/cJSON'
-  
-  
-  
-#  pod 'Eigen', '~> 3.4.0'
 end

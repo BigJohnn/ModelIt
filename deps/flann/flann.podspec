@@ -11,7 +11,7 @@ Pod::Spec.new do |spec|
   }
 
   spec.source       = { :http => "http://people.cs.ubc.ca/~mariusm/uploads/FLANN/flann-1.8.4-src.zip" }
-  spec.ios.deployment_target = "11.0"
+  spec.ios.deployment_target = "12.0"
   
   spec.source_files = "src/cpp/**/**"
   

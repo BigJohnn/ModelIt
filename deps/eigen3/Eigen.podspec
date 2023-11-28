@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
   }
 
   spec.source       = { :git => "https://gitlab.com/libeigen/eigen.git", :tag => "#{spec.version}" }
-  spec.ios.deployment_target = "11.0"
+  spec.ios.deployment_target = "12.0"
 #  spec.source_files  = "**/**.{h,hpp}"
 #  spec.source_files  = ""
 #  spec.preserve_paths = './'

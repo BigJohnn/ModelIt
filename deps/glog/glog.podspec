@@ -11,7 +11,7 @@ Pod::Spec.new do |spec|
   }
 
   spec.source       = { :http => "https://github.com/google/glog.git" }
-  spec.ios.deployment_target = "11.0"
+  spec.ios.deployment_target = "12.0"
   
   spec.source_files = "include/**/**.{h}"
 

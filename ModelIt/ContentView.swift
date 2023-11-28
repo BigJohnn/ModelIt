@@ -138,6 +138,8 @@ struct CameraView: View {
             
             Pipeline_PrepareDenseScene()
             
+            Pipeline_DepthMapEstimation()
+            
         }, label: {
             Text("FeatureExtraction")
                 .foregroundColor(.white)

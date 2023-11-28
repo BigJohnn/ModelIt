@@ -36,4 +36,5 @@ Xcode=>BuildSettings=>Implicit Conversion to 32 Bit Type(No)
 7.OpenExr
 a.cmake中设置option(BUILD_SHARED_LIBS "Build shared library" OFF)
 b.xcode build 一下targets中的install, 删掉报错的无关targets
-8.metal compiler options里面的HEADER_SEARCH_PATH设置为$(PROJECT_DIR)/Headers/Public/SoftVision，从而在metal文件中正确引用。
+8.metal compiler options里面的HEADER_SEARCH_PATH设置为$(PROJECT_DIR)/Headers/Public/SoftVision，从而在metal文件中正确引用。# .podspec设置xcconfig => MTL_HEADER_SEARCH_PATHS (通过Pods=>Target=>Build Settings=>选中该条目=>右边栏"Quick Help"=>Declaration获取该KEY
+9.bundle 路径：~/Library/Developer/Xcode/DerivedData/ModelIt-erwcyofpzohadogxwxoskaoqicer/Build/Products/Debug-iphoneos/SoftVision/metalshaders.bundle
