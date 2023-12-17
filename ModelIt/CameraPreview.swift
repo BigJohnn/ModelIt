@@ -71,7 +71,8 @@ public struct CameraPreview: UIViewRepresentable {
         viewFinder.backgroundColor = .black
         viewFinder.videoPreviewLayer.cornerRadius = 0
         viewFinder.videoPreviewLayer.session = session
-        viewFinder.videoPreviewLayer.connection?.videoOrientation = .portrait
+//        viewFinder.videoPreviewLayer.connection?.videoOrientation = .portrait
+        viewFinder.videoPreviewLayer.connection?.videoRotationAngle = 90
         return viewFinder
     }
     

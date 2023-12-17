@@ -308,13 +308,14 @@ public class CameraService: NSObject, Identifiable {
          */
     
         print("capture photo ...")
-        let videoPreviewLayerOrientation: AVCaptureVideoOrientation = .portrait
+//        let videoPreviewLayerOrientation: AVCaptureVideoOrientation = .portrait
         
         sessionQueue.async {
             
             print("capture photo session queue ...")
             if let photoOutputConnection = self.photoOutput.connection(with: .video) {
-                photoOutputConnection.videoOrientation = videoPreviewLayerOrientation
+//                photoOutputConnection.videoOrientation = videoPreviewLayerOrientation
+                photoOutputConnection.videoRotationAngle = 90
             }
             
             guard self.photoOutput.availablePhotoPixelFormatTypes.first != nil else {

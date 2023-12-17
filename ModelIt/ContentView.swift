@@ -45,7 +45,15 @@ final class CameraModel: ObservableObject {
         /// Pipeline entrance
         Pipeline_CameraInit()
         
-        let path = FileManager.default.temporaryDirectory.path()
+        
+//        let path = Bundle.main.bundleURL.path() //FileManager.default.temporaryDirectory.path()
+//
+        let fm = FileManager.default
+        let urls = fm.urls(for: .documentDirectory, in: .userDomainMask)
+        let path = urls.last?.path() ?? ""
+        
+//        var path = FileManager.default.temporaryDirectory.path()
+//        let path = Bundle.main.resourceURL?.path()
         Pipeline_SetOutputDataDir(path)
     }
     
@@ -112,7 +120,10 @@ struct CameraView: View {
     
     var cacheClearButton: some View {
         Button(action: {
-            let path = FileManager.default.temporaryDirectory.path()
+//            let path = FileManager.default.temporaryDirectory.path()
+            let fm = FileManager.default
+            let urls = fm.urls(for: .documentDirectory, in: .userDomainMask)
+            let path = urls.last?.path() ?? ""
             model.clearCache(directory: path)
             
         }, label: {
