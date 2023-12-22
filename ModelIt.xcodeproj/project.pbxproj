@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3C29324789354B2EC1998655 /* libPods-ModelIt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C07C4651B1EF875E83B3BB4 /* libPods-ModelIt.a */; };
+		E32E0D51EB5FDF624AAFD5BE /* Pods_ModelIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E059DCAF68DB49574BFDA584 /* Pods_ModelIt.framework */; };
 		FA4C4E642A822E73001F144F /* CVPixelBufferPixelFormatNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C4E632A822E73001F144F /* CVPixelBufferPixelFormatNames.swift */; };
 		FA569C042A63DF8800CFE693 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA569C032A63DF8800CFE693 /* ThumbnailView.swift */; };
 		FA9F43292A5FADDF00ED4286 /* ModelItApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F43282A5FADDF00ED4286 /* ModelItApp.swift */; };
@@ -44,7 +44,7 @@
 
 /* Begin PBXFileReference section */
 		3BA4C918C59D400A4A0138E9 /* Pods-ModelIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelIt.debug.xcconfig"; path = "Target Support Files/Pods-ModelIt/Pods-ModelIt.debug.xcconfig"; sourceTree = "<group>"; };
-		9C07C4651B1EF875E83B3BB4 /* libPods-ModelIt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ModelIt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E059DCAF68DB49574BFDA584 /* Pods_ModelIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ModelIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF43E79D4A88AE4FDF26D058 /* Pods-ModelIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelIt.release.xcconfig"; path = "Target Support Files/Pods-ModelIt/Pods-ModelIt.release.xcconfig"; sourceTree = "<group>"; };
 		FA49A98E2A755094001E5A14 /* libOpenImageIO_d.2.5.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenImageIO_d.2.5.2.dylib; path = deps/OpenImageIO/lib/libOpenImageIO_d.2.5.2.dylib; sourceTree = "<group>"; };
 		FA49A98F2A755094001E5A14 /* libOpenImageIO_Util_d.2.5.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenImageIO_Util_d.2.5.2.dylib; path = deps/OpenImageIO/lib/libOpenImageIO_Util_d.2.5.2.dylib; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C29324789354B2EC1998655 /* libPods-ModelIt.a in Frameworks */,
+				E32E0D51EB5FDF624AAFD5BE /* Pods_ModelIt.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +109,7 @@
 				FA6407D62A769FE600737E6C /* libOpenImageIO_Util_d.a */,
 				FA49A98E2A755094001E5A14 /* libOpenImageIO_d.2.5.2.dylib */,
 				FA49A98F2A755094001E5A14 /* libOpenImageIO_Util_d.2.5.2.dylib */,
-				9C07C4651B1EF875E83B3BB4 /* libPods-ModelIt.a */,
+				E059DCAF68DB49574BFDA584 /* Pods_ModelIt.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -201,6 +201,7 @@
 				FA9F43222A5FADDF00ED4286 /* Frameworks */,
 				FA9F43232A5FADDF00ED4286 /* Resources */,
 				00A623532D97FC9D94C4FDEB /* [CP] Copy Pods Resources */,
+				F356765C66E32060C67FD3FE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -354,6 +355,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F356765C66E32060C67FD3FE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ModelIt/Pods-ModelIt-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ModelIt/Pods-ModelIt-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ModelIt/Pods-ModelIt-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

@@ -1,6 +1,8 @@
+use_frameworks!
+
 platform :ios, '12.0'
 
-#use_frameworks!
+
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'ModelIt' do
@@ -9,6 +11,8 @@ target 'ModelIt' do
   pod 'Alembic', :path => './deps/Alembic'
   
   pod 'assimp', :path => './deps/assimp'
+  
+  pod 'mtlkernels', :path => './deps/mtlkernels', :inhibit_warnings => true
   
   pod 'SoftVision', :path => './deps/SoftVision', :inhibit_warnings => true
   
@@ -33,4 +37,24 @@ target 'ModelIt' do
   pod 'Ceres', :path => './deps/Ceres'
   
   pod 'cJSON', :path => './deps/cJSON'
+  
+  
+  
+end
+
+dynamic_frameworks = ['mtlkernels'] # <- swift libraries names
+
+# Make all the other frameworks into static frameworks by overriding the static_framework? function to return true
+pre_install do |installer|
+  installer.pod_targets.each do |pod|
+    if !dynamic_frameworks.include?(pod.name)
+      puts "Overriding the static_framework? method for #{pod.name}"
+      def pod.static_framework?;
+        true
+      end
+      def pod.build_type;
+        Pod::BuildType.static_library
+      end
+    end
+  end
 end
