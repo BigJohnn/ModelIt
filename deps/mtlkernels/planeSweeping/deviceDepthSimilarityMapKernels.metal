@@ -1,14 +1,9 @@
 //#pragma once
 
 
-//#include <depthMap/gpu/device/DeviceCameraParams.hpp>
-//#include <mvsData/ROI_d.hpp>
-//#include <depthMap/gpu/device/BufPtr.metal>
-//#include <depthMap/gpu/device/Patch.metal>
-//#include <depthMap/gpu/device/eig33.metal>
+#include <mvsData/ROI_d.hpp>
+#include <depthMap/gpu/device/DeviceCameraParams.hpp>
 
-#include "../device/DeviceCameraParams.hpp"
-#include "ROI_d.hpp"
 #include "../device/BufPtr.metal"
 #include "../device/Patch.metal"
 #include "../device/eig33.metal"

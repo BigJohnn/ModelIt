@@ -1,8 +1,12 @@
 //#pragma once
 
-//#include <depthMap/gpu/device/DeviceCameraParams.hpp>
-#include "DeviceCameraParams.hpp"
-#include "../planeSweeping/similarity.hpp"
+#include <depthMap/gpu/device/DeviceCameraParams.hpp>
+//#include "DeviceCameraParams.hpp"
+//#include "../planeSweeping/similarity.hpp"
+#include <depthMap/gpu/planeSweeping/similarity.hpp>
+#include <mvsData/ROI_d.hpp>
+
+//#include "
 //#include <depthMap/gpu/device/BufPtr.metal>
 //#include <depthMap/BufPtr.hpp>
 

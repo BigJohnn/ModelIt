@@ -10,8 +10,8 @@
 #include "matrix.metal"
 #include "SimStat.metal"
 
-#include "DeviceCameraParams.hpp"
-#include "DevicePatchPattern.hpp"
+#include <depthMap/gpu/device/DeviceCameraParams.hpp>
+#include <depthMap/gpu/device/DevicePatchPattern.hpp>
 
 #include <metal_stdlib>
 using namespace metal;

@@ -1,6 +1,6 @@
 use_frameworks!
 
-platform :ios, '12.0'
+platform :ios, '13.0'
 
 
 install! 'cocoapods', :deterministic_uuids => false
@@ -46,6 +46,7 @@ dynamic_frameworks = ['mtlkernels'] # <- swift libraries names
 
 # Make all the other frameworks into static frameworks by overriding the static_framework? function to return true
 pre_install do |installer|
+Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
   installer.pod_targets.each do |pod|
     if !dynamic_frameworks.include?(pod.name)
       puts "Overriding the static_framework? method for #{pod.name}"

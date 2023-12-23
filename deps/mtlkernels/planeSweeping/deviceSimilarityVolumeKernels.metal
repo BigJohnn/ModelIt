@@ -4,13 +4,13 @@
 // v. 2.0. If a copy of the MPL was not distributed with this file,
 // You can obtain one at https://mozilla.org/MPL/2.0/.
 
-//#include <mvsData/ROI_d.hpp>
-//#include <depthMap/gpu/planeSweeping/similarity.hpp>
+#include <depthMap/gpu/planeSweeping/similarity.hpp>
+#include <mvsData/ROI_d.hpp>
 //#include <depthMap/gpu/device/BufPtr.metal>
 //#include <depthMap/gpu/device/Patch.metal>
 
-#include "ROI_d.hpp"
-#include "similarity.hpp"
+//#include "ROI_d.hpp"
+//#include "similarity.hpp"
 #include "../device/BufPtr.metal"
 #include "../device/Patch.metal"
 

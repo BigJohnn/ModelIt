@@ -1,6 +1,8 @@
 
 //#pragma once
-#include "../planeSweeping/similarity.hpp"
+//#include "../planeSweeping/similarity.hpp"
+//#include
+#include <depthMap/gpu/planeSweeping/similarity.hpp>
 
 namespace depthMap {
 
