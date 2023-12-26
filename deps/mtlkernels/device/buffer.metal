@@ -35,6 +35,7 @@ device T* get3DBufferAt(device T* ptr, constant int& spitch, constant int& pitch
     return ((device T*)(((device unsigned char*)ptr) + z * spitch + y * pitch)) + x;
 }
 template device TSim* get3DBufferAt(device TSim* ptr, constant int& spitch, constant int& pitch, unsigned x, unsigned y, unsigned z);
+template device TSimRefine* get3DBufferAt(device TSimRefine* ptr, constant int& spitch, constant int& pitch, unsigned x, unsigned y, unsigned z);
 
 //template <typename T>
 //const device T* get3DBufferAt(const device T* ptr, int spitch, int pitch, int x, int y, int z)

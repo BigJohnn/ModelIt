@@ -589,29 +589,28 @@ static float compNCCbyH(const DeviceCameraParams& rcDeviceCamParams,
  *          -> infinite similarity value: 1
  *          -> invalid/uninitialized/masked similarity: INF_F
  */
-//template<bool TInvertAndFilter>
 inline float compNCCby3DptsYK(constant DeviceCameraParams& rcDeviceCamParams,
                               constant DeviceCameraParams& tcDeviceCamParams,
                               texture2d<half> rcMipmapImage_tex[[texture(0)]],
                               texture2d<half> tcMipmapImage_tex[[texture(1)]],
-                              constant unsigned int& rcLevelWidth,
-                              constant unsigned int& rcLevelHeight,
+                              constant unsigned int& rcLevelWidth, //180
+                              constant unsigned int& rcLevelHeight, //320
                               constant unsigned int& tcLevelWidth,
                               constant unsigned int& tcLevelHeight,
                               constant float& mipmapLevel,
-                              constant int& wsh,
+                              constant int& wsh, //4
                               constant float& invGammaC,
                               constant float& invGammaP,
                               constant bool& useConsistentScale,
                               thread bool& TInvertAndFilter,
-                              thread           const Patch& patch)
+                              thread const Patch& patch)
 {
     // get R and T image 2d coordinates from patch center 3d point
     const float2 rp = project3DPoint(rcDeviceCamParams.P, patch.p);
     const float2 tp = project3DPoint(tcDeviceCamParams.P, patch.p);
 
     // image 2d coordinates margin
-    const float dd = wsh + 2.0f; // TODO: FACA
+    const float dd = wsh/* 4 */ + 2.0f; // TODO: FACA
 
     // check R and T image 2d coordinates
     if((rp.x < dd) || (rp.x > float(rcLevelWidth  - 1) - dd) ||
@@ -634,7 +633,7 @@ inline float compNCCby3DptsYK(constant DeviceCameraParams& rcDeviceCamParams,
     float tcMipmapLevel = mipmapLevel;
 
     // update R and T mipmap image level in order to get consistent scale patch comparison
-    if(useConsistentScale)
+    if(useConsistentScale) //false
     {
         computeRcTcMipmapLevels(rcMipmapLevel, tcMipmapLevel, mipmapLevel, rcDeviceCamParams, tcDeviceCamParams, rp, tp, patch.p);
     }
@@ -645,17 +644,16 @@ inline float compNCCby3DptsYK(constant DeviceCameraParams& rcDeviceCamParams,
     // compute patch center color (CIELAB) at R and T mipmap image level
     constexpr sampler textureSampler (mag_filter::linear,
                                       min_filter::linear);
-//    const float4 rcCenterColor = tex2DLod<float4>(rcMipmapImage_tex, (rp.x + 0.5f) * rcInvLevelWidth, (rp.y + 0.5f) * rcInvLevelHeight, rcMipmapLevel);
-//    const float4 tcCenterColor = tex2DLod<float4>(tcMipmapImage_tex, (tp.x + 0.5f) * tcInvLevelWidth, (tp.y + 0.5f) * tcInvLevelHeight, tcMipmapLevel);
+
     const half4 rcCenterColor = rcMipmapImage_tex.sample(textureSampler, float2((rp.x + 0.5f) * rcInvLevelWidth, (rp.y + 0.5f) * rcInvLevelHeight), level(rcMipmapLevel));
     const half4 tcCenterColor = tcMipmapImage_tex.sample(textureSampler, float2((tp.x + 0.5f) * tcInvLevelWidth, (tp.y + 0.5f) * tcInvLevelHeight), level(tcMipmapLevel));
-
+    
     // check the alpha values of the patch pixel center of the R and T cameras
-    if(rcCenterColor.w < ALICEVISION_DEPTHMAP_RC_MIN_ALPHA || tcCenterColor.w < ALICEVISION_DEPTHMAP_TC_MIN_ALPHA)
+    if(rcCenterColor.w < SOFTVISION_DEPTHMAP_RC_MIN_ALPHA || tcCenterColor.w < SOFTVISION_DEPTHMAP_TC_MIN_ALPHA)
     {
         return INF_F; // masked
     }
-
+    
     // compute patch (wsh*2+1)x(wsh*2+1)
     for(int yp = -wsh; yp <= wsh; ++yp)
     {
@@ -669,8 +667,6 @@ inline float compNCCby3DptsYK(constant DeviceCameraParams& rcDeviceCamParams,
             const float2 tpc = project3DPoint(tcDeviceCamParams.P, p);
 
             // get R and T image color (CIELAB) from 2d coordinates
-//            const float4 rcPatchCoordColor = tex2DLod<float4>(rcMipmapImage_tex, (rpc.x + 0.5f) * rcInvLevelWidth, (rpc.y + 0.5f) * rcInvLevelHeight, rcMipmapLevel);
-//            const float4 tcPatchCoordColor = tex2DLod<float4>(tcMipmapImage_tex, (tpc.x + 0.5f) * tcInvLevelWidth, (tpc.y + 0.5f) * tcInvLevelHeight, tcMipmapLevel);
             const half4 rcPatchCoordColor = rcMipmapImage_tex.sample(textureSampler, float2((rpc.x + 0.5f) * rcInvLevelWidth, (rpc.y + 0.5f) * rcInvLevelHeight), level(rcMipmapLevel));
             const half4 tcPatchCoordColor = tcMipmapImage_tex.sample(textureSampler, float2((tpc.x + 0.5f) * tcInvLevelWidth, (tpc.y + 0.5f) * tcInvLevelHeight), level(tcMipmapLevel));
 
@@ -778,7 +774,7 @@ inline float compNCCby3DptsYK_customPatchPattern(constant DeviceCameraParams& rc
     const half tcAlpha = tcMipmapImage_tex.sample(textureSampler, float2((tp.x + 0.5f) * tcInvLevelWidth, (tp.y + 0.5f) * tcInvLevelHeight), level(mipmapLevel)).w;
 
     // check the alpha values of the patch pixel center of the R and T cameras
-    if(rcAlpha < ALICEVISION_DEPTHMAP_RC_MIN_ALPHA || tcAlpha < ALICEVISION_DEPTHMAP_TC_MIN_ALPHA)
+    if(rcAlpha < SOFTVISION_DEPTHMAP_RC_MIN_ALPHA || tcAlpha < SOFTVISION_DEPTHMAP_TC_MIN_ALPHA)
     {
         return INF_F; // masked
     }

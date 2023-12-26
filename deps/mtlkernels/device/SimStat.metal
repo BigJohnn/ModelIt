@@ -101,8 +101,10 @@ struct simStat
          // const float rawSim = getVarianceXYW() / sqrtf(getVarianceXW() * getVarianceYW());
          const float rawSim = divide(getVarianceXYW(), sqrt(getVarianceXW() * getVarianceYW()));
 
-         const float sim = isfinite(rawSim) ? -rawSim : 1.0f;
+         float sim = isfinite(rawSim) ? -rawSim : 1.0f;
          // sim = fmaxf(fminf(sim, 1.0f), -1.0f); // clamp
+         
+//         sim = 0.5f;
          return sim;
      }
 

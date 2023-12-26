@@ -3,6 +3,8 @@
 //#include "../planeSweeping/similarity.hpp"
 //#include
 #include <depthMap/gpu/planeSweeping/similarity.hpp>
+#include <metal_stdlib>
+using namespace metal;
 
 namespace depthMap {
 
@@ -53,6 +55,8 @@ device T* get2DBufferAt(device T* ptr, int pitch, int x, int y)
 template device TSimAcc* get2DBufferAt(device TSimAcc* ptr, int pitch, int x, int y);
 template device TSim* get2DBufferAt(device TSim* ptr, int pitch, int x, int y);
 template device float* get2DBufferAt(device float* ptr, int pitch, int x, int y);
+template device float2* get2DBufferAt(device float2* ptr, int pitch, int x, int y);
+template device float3* get2DBufferAt(device float3* ptr, int pitch, int x, int y);
 
 } // namespace depthMap
 

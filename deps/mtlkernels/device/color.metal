@@ -1,12 +1,10 @@
-//#pragma once
-
 #include "buffer.metal"
 
 // for the R camera, image alpha should be at least 0.9f (computation area)
-#define ALICEVISION_DEPTHMAP_RC_MIN_ALPHA (255.f * 0.9f) // texture range (0, 255)
+#define SOFTVISION_DEPTHMAP_RC_MIN_ALPHA (0.9f) // texture range (0, 1)
 
 // for the T camera, image alpha should be at least 0.4f (masking)
-#define ALICEVISION_DEPTHMAP_TC_MIN_ALPHA (255.f * 0.4f) // texture range (0, 255)
+#define SOFTVISION_DEPTHMAP_TC_MIN_ALPHA (0.4f) // texture range (0, 1)
 
 #define norm3df(x,y,z) length(float3(x,y,z)) //CHECK
 

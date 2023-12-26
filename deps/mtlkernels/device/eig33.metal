@@ -342,7 +342,7 @@ static void cuda_eigen_decomposition(float A[3][3], float V0[], float V1[], floa
     cuda_tql2(V0, V1, V2, d, e);
 }
 
-struct cuda_stat3d
+struct stat3d
 {
     float xsum;
     float ysum;
@@ -355,7 +355,7 @@ struct cuda_stat3d
     float yzsum;
     float count;
 
-    cuda_stat3d()
+    stat3d()
     {
         xsum = 0.0;
         ysum = 0.0;
@@ -405,11 +405,11 @@ struct cuda_stat3d
         cuda_eigen_decomposition(A, V[0], V[1], V[2], d);
 
         v1 = float3((float)V[0][2], (float)V[1][2], (float)V[2][2]);
-        normalize(v1);
+        v1 = normalize(v1);
         v2 = float3((float)V[0][1], (float)V[1][1], (float)V[2][1]);
-        normalize(v2);
+        v2 = normalize(v2);
         v3 = float3((float)V[0][0], (float)V[1][0], (float)V[2][0]);
-        normalize(v3);
+        v3 = normalize(v3);
 
         cg.x = (float)(xsum / count);
         cg.y = (float)(ysum / count);
