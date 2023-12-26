@@ -549,85 +549,88 @@ kernel void volume_retrieveBestDepth_kernel(device float2* out_sgmDepthThickness
 }
 
 
-kernel void volume_refineBestDepth_kernel(device float2* out_refineDepthSimMap_d, device int& out_refineDepthSimMap_p,
-                                          device const float2* in_sgmDepthPixSizeMap_d, device int& in_sgmDepthPixSizeMap_p,
-                                          device const TSimRefine* in_volSim_d, device int& in_volSim_s, device int& in_volSim_p,
-                                          device int& volDimZ,
-                                          device int& samplesPerPixSize, // number of subsamples (samples between two depths)
-                                          device int& halfNbSamples,     // number of samples (in front and behind mid depth)
-                                          device int& halfNbDepths,      // number of depths  (in front and behind mid depth) should be equal to (volDimZ - 1) / 2
-                                          device float& twoTimesSigmaPowerTwo,
-                                          device const ROI_d& roi)
+kernel void volume_refineBestDepth_kernel(device float2* out_refineDepthSimMap_d, constant int& out_refineDepthSimMap_p,
+                                          device const float2* in_sgmDepthPixSizeMap_d, constant int& in_sgmDepthPixSizeMap_p,
+                                          device const TSimRefine* in_volSim_d, constant int& in_volSim_s, constant int& in_volSim_p,
+                                          constant int& volDimZ,
+                                          constant int& samplesPerPixSize, // number of subsamples (samples between two depths)
+                                          constant int& halfNbSamples,     // number of samples (in front and behind mid depth)
+                                          constant int& halfNbDepths,      // number of depths  (in front and behind mid depth) should be equal to (volDimZ - 1) / 2
+                                          constant float& twoTimesSigmaPowerTwo,
+                                          constant ROI_d& roi,
+                                          uint3 index [[thread_position_in_grid]])
 {
-//    const unsigned int vx = blockIdx.x * blockDim.x + threadIdx.x;
-//    const unsigned int vy = blockIdx.y * blockDim.y + threadIdx.y;
-//
-//    if(vx >= roiWidth || vy >= roiHeight)
-//        return;
-//
-//    // corresponding input sgm depth/pixSize (middle depth)
-//    const float2 in_sgmDepthPixSize = *get2DBufferAt(in_sgmDepthPixSizeMap_d, in_sgmDepthPixSizeMap_p, vx, vy);
-//
-//    // corresponding output depth/sim pointer
-//    float2* out_bestDepthSimPtr = get2DBufferAt(out_refineDepthSimMap_d, out_refineDepthSimMap_p, vx, vy);
-//
-//    // sgm depth (middle depth) invalid or masked
-//    if(in_sgmDepthPixSize.x <= 0.0f)
-//    {
-//        out_bestDepthSimPtr->x = in_sgmDepthPixSize.x;  // -1 (invalid) or -2 (masked)
-//        out_bestDepthSimPtr->y = 1.0f;                  // similarity between (-1, +1)
-//        return;
-//    }
-//
-//    // find best z sample per pixel
-//    float bestSampleSim = 0.f;      // all sample sim <= 0.f
-//    int bestSampleOffsetIndex = 0;  // default is middle depth (SGM)
-//
-//    // sliding gaussian window
-//    for(int sample = -halfNbSamples; sample <= halfNbSamples; ++sample)
-//    {
-//        float sampleSim = 0.f;
-//
-//        for(int vz = 0; vz < volDimZ; ++vz)
-//        {
-//            const int rz = (vz - halfNbDepths);    // relative depth index offset
-//            const int zs = rz * samplesPerPixSize; // relative sample offset
-//
-//            // get the inverted similarity sum value
-//            // best value is the HIGHEST
-//            // worst value is 0
-//            const float invSimSum = *get3DBufferAt(in_volSim_d, in_volSim_s, in_volSim_p, vx, vy, vz);
-//
-//            // reverse the inverted similarity sum value
-//            // best value is the LOWEST
-//            // worst value is 0
-//            const float simSum = -invSimSum;
-//
-//            // apply gaussian
-//            // see: https://www.desmos.com/calculator/ribalnoawq
-//            sampleSim += simSum * expf(-((zs - sample) * (zs - sample)) / twoTimesSigmaPowerTwo);
-//        }
-//
-//        if(sampleSim < bestSampleSim)
-//        {
-//            bestSampleOffsetIndex = sample;
-//            bestSampleSim = sampleSim;
-//        }
-//    }
-//
-//    // compute sample size
-//    const float sampleSize = in_sgmDepthPixSize.y / samplesPerPixSize; // input sgm pixSize / samplesPerPixSize
-//
-//    // compute sample size offset from z center
-//    const float sampleSizeOffset = bestSampleOffsetIndex * sampleSize;
-//
-//    // compute best depth
-//    // input sgm depth (middle depth) + sample size offset from z center
-//    const float bestDepth = in_sgmDepthPixSize.x + sampleSizeOffset;
-//
-//    // write output best depth/sim
-//    out_bestDepthSimPtr->x = bestDepth;
-//    out_bestDepthSimPtr->y = bestSampleSim;
+    const unsigned int vx = index.x;
+    const unsigned int vy = index.y;
+
+    unsigned int roiWidth = roi.rb.x - roi.lt.x;
+    unsigned int roiHeight = roi.rb.y - roi.lt.y;
+    if(vx >= roiWidth || vy >= roiHeight)
+        return;
+
+    // corresponding input sgm depth/pixSize (middle depth)
+    const float2 in_sgmDepthPixSize = *get2DBufferAt(in_sgmDepthPixSizeMap_d, in_sgmDepthPixSizeMap_p, vx, vy);
+
+    // corresponding output depth/sim pointer
+    device float2* out_bestDepthSimPtr = get2DBufferAt(out_refineDepthSimMap_d, out_refineDepthSimMap_p, vx, vy);
+
+    // sgm depth (middle depth) invalid or masked
+    if(in_sgmDepthPixSize.x <= 0.0f)
+    {
+        out_bestDepthSimPtr->x = in_sgmDepthPixSize.x;  // -1 (invalid) or -2 (masked)
+        out_bestDepthSimPtr->y = 1.0f;                  // similarity between (-1, +1)
+        return;
+    }
+
+    // find best z sample per pixel
+    float bestSampleSim = 0.f;      // all sample sim <= 0.f
+    int bestSampleOffsetIndex = 0;  // default is middle depth (SGM)
+
+    // sliding gaussian window
+    for(int sample = -halfNbSamples; sample <= halfNbSamples; ++sample)
+    {
+        float sampleSim = 0.f;
+
+        for(int vz = 0; vz < volDimZ; ++vz)
+        {
+            const int rz = (vz - halfNbDepths);    // relative depth index offset
+            const int zs = rz * samplesPerPixSize; // relative sample offset
+
+            // get the inverted similarity sum value
+            // best value is the HIGHEST
+            // worst value is 0
+            const float invSimSum = *get3DBufferAt(in_volSim_d, in_volSim_s, in_volSim_p, vx, vy, vz);
+
+            // reverse the inverted similarity sum value
+            // best value is the LOWEST
+            // worst value is 0
+            const float simSum = -invSimSum;
+
+            // apply gaussian
+            // see: https://www.desmos.com/calculator/ribalnoawq
+            sampleSim += simSum * exp(-((zs - sample) * (zs - sample)) / twoTimesSigmaPowerTwo);
+        }
+
+        if(sampleSim < bestSampleSim)
+        {
+            bestSampleOffsetIndex = sample;
+            bestSampleSim = sampleSim;
+        }
+    }
+
+    // compute sample size
+    const float sampleSize = in_sgmDepthPixSize.y / samplesPerPixSize; // input sgm pixSize / samplesPerPixSize
+
+    // compute sample size offset from z center
+    const float sampleSizeOffset = bestSampleOffsetIndex * sampleSize;
+
+    // compute best depth
+    // input sgm depth (middle depth) + sample size offset from z center
+    const float bestDepth = in_sgmDepthPixSize.x + sampleSizeOffset;
+
+    // write output best depth/sim
+    out_bestDepthSimPtr->x = bestDepth;
+    out_bestDepthSimPtr->y = bestSampleSim;
 }
 
 //template <typename T>

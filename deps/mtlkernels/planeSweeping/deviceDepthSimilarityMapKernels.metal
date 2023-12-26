@@ -15,7 +15,11 @@
 
 namespace depthMap {
 
-
+bool isBeyondROI(thread uint2& index, constant ROI_d& roi){
+    unsigned int roiWidth = roi.rb.x - roi.lt.x;
+    unsigned int roiHeight = roi.rb.y - roi.lt.y;
+    return (index.x >= roiWidth || index.y >= roiHeight);
+}
     
 /**
  * @return (smoothStep, energy)
@@ -491,42 +495,51 @@ kernel void depthSimMapComputeNormal_kernel(device float3* out_normalMap_d, cons
     *out_normal = nn;
 }
 
-kernel void optimize_varLofLABtoW_kernel(device float* out_varianceMap_d, device int* out_varianceMap_p,
+    
+kernel void optimize_varLofLABtoW_kernel(device float* out_varianceMap_d, constant int& out_varianceMap_p,
                                          texture2d<half> rcMipmapImage_tex[[texture(0)]],
-                                         device const unsigned int* rcLevelWidth,
-                                         device const unsigned int* rcLevelHeight,
-                                         device const float* rcMipmapLevel,
-                                         device const int* stepXY,
-                                         device const ROI_d* roi)
+                                         constant unsigned int& rcLevelWidth,
+                                         constant unsigned int& rcLevelHeight,
+                                         constant float& rcMipmapLevel,
+                                         constant int& stepXY,
+                                         constant ROI_d& roi,
+                                         uint2 index [[thread_position_in_grid]])
 {
-//    // roi and varianceMap coordinates
-//    const unsigned int roiX = blockIdx.x * blockDim.x + threadIdx.x;
-//    const unsigned int roiY = blockIdx.y * blockDim.y + threadIdx.y;
-//
+    // roi and varianceMap coordinates
+    const unsigned int roiX = index.x;
+    const unsigned int roiY = index.y;
+
+//    unsigned int roiWidth = roi.rb.x - roi.lt.x;
+//    unsigned int roiHeight = roi.rb.y - roi.lt.y;
 //    if(roiX >= roiWidth || roiY >= roiHeight)
 //        return;
-//
-//    // corresponding image coordinates
-//    const float x = float(roi.x.begin + roiX) * float(stepXY);
-//    const float y = float(roi.y.begin + roiY) * float(stepXY);
-//
-//    // compute inverse width / height
-//    // note: useful to compute p1 / m1 normalized coordinates
-//    const float invLevelWidth  = 1.f / float(rcLevelWidth);
-//    const float invLevelHeight = 1.f / float(rcLevelHeight);
-//
-//    // compute gradient size of L
-//    // note: we use 0.5f offset because rcTex texture use interpolation
-//    const float xM1 = tex2DLod<float4>(rcMipmapImage_tex, ((x - 1.f) + 0.5f) * invLevelWidth, ((y + 0.f) + 0.5f) * invLevelHeight, rcMipmapLevel).x;
-//    const float xP1 = tex2DLod<float4>(rcMipmapImage_tex, ((x + 1.f) + 0.5f) * invLevelWidth, ((y + 0.f) + 0.5f) * invLevelHeight, rcMipmapLevel).x;
-//    const float yM1 = tex2DLod<float4>(rcMipmapImage_tex, ((x + 0.f) + 0.5f) * invLevelWidth, ((y - 1.f) + 0.5f) * invLevelHeight, rcMipmapLevel).x;
-//    const float yP1 = tex2DLod<float4>(rcMipmapImage_tex, ((x + 0.f) + 0.5f) * invLevelWidth, ((y + 1.f) + 0.5f) * invLevelHeight, rcMipmapLevel).x;
-//
-//    const float2 g = make_float2(xM1 - xP1, yM1 - yP1); // TODO: not divided by 2?
+    if(isBeyondROI(index, roi)) return;
+
+    // corresponding image coordinates
+    const float x = float(roi.lt.x + roiX) * float(stepXY);
+    const float y = float(roi.lt.y + roiY) * float(stepXY);
+
+    // compute inverse width / height
+    // note: useful to compute p1 / m1 normalized coordinates
+    const float invLevelWidth  = 1.f / float(rcLevelWidth);
+    const float invLevelHeight = 1.f / float(rcLevelHeight);
+
+    // compute gradient size of L
+    // note: we use 0.5f offset because rcTex texture use interpolation
+    constexpr sampler textureSampler (mag_filter::linear,
+                                      min_filter::linear);
+//    rcMipmapImage_tex.sample(textureSampler,
+    const float xM1 = rcMipmapImage_tex.sample(textureSampler, float2(((x - 1.f) + 0.5f) * invLevelWidth, ((y + 0.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).x;
+    const float xP1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 1.f) + 0.5f) * invLevelWidth, ((y + 0.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).x;
+    const float yM1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 0.f) + 0.5f) * invLevelWidth, ((y - 1.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).x;
+    const float yP1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 0.f) + 0.5f) * invLevelWidth, ((y + 1.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).x;
+
+    const float2 g = float2(xM1 - xP1, yM1 - yP1); // TODO: not divided by 2?
 //    const float grad = size(g);
-//
-//    // write output
-//    *get2DBufferAt(out_varianceMap_d, out_varianceMap_p, roiX, roiY) = grad;
+    const float grad = length(g);
+
+    // write output
+    *get2DBufferAt(out_varianceMap_d, out_varianceMap_p, roiX, roiY) = grad;
 }
 
 kernel void optimize_getOptDeptMapFromOptDepthSimMap_kernel(device float* out_tmpOptDepthMap_d, device int* out_tmpOptDepthMap_p,
