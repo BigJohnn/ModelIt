@@ -21,84 +21,96 @@ bool isBeyondROI(thread uint2& index, constant ROI_d& roi){
     return (index.x >= roiWidth || index.y >= roiHeight);
 }
     
+constexpr sampler textureSamplerX (mag_filter::linear,
+                                  min_filter::linear);
 /**
  * @return (smoothStep, energy)
  */
-float2 getCellSmoothStepEnergy(device const DeviceCameraParams& rcDeviceCamParams,
-                                      texture2d<half> in_depth_tex[[texture(1)]],
+float2 getCellSmoothStepEnergy(constant DeviceCameraParams& rcDeviceCamParams,
+                               device const float* in_depthMap, constant int& in_depthMap_p,
                                       thread const float2& cell0,
-                                      thread const float2& offsetRoi)
+                                      thread const float2& offsetRoi,
+                                      thread const float2& resolution)
 {
     float2 out = float2(0.0f, 180.0f);
 
-//    // get pixel depth from the depth texture
-//    // note: we do not use 0.5f offset because in_depth_tex use nearest neighbor interpolation
+    // get pixel depth from the depth texture
+    // note: we do not use 0.5f offset because in_depth_tex use nearest neighbor interpolation
 //    const float d0 = tex2D<float>(in_depth_tex, cell0.x, cell0.y);
-//
-//    // early exit: depth is <= 0
-//    if(d0 <= 0.0f)
-//        return out;
-//
-//    // consider the neighbor pixels
-//    const float2 cellL = cell0 + make_float2( 0.f, -1.f); // Left
-//    const float2 cellR = cell0 + make_float2( 0.f,  1.f); // Right
-//    const float2 cellU = cell0 + make_float2(-1.f,  0.f); // Up
-//    const float2 cellB = cell0 + make_float2( 1.f,  0.f); // Bottom
-//
-//    // get associated depths from depth texture
-//    // note: we do not use 0.5f offset because in_depth_tex use nearest neighbor interpolation
-//    const float dL = tex2D<float>(in_depth_tex, cellL.x, cellL.y);
-//    const float dR = tex2D<float>(in_depth_tex, cellR.x, cellR.y);
-//    const float dU = tex2D<float>(in_depth_tex, cellU.x, cellU.y);
-//    const float dB = tex2D<float>(in_depth_tex, cellB.x, cellB.y);
-//
-//    // get associated 3D points
-//    const float3 p0 = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cell0 + offsetRoi, d0);
-//    const float3 pL = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellL + offsetRoi, dL);
-//    const float3 pR = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellR + offsetRoi, dR);
-//    const float3 pU = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellU + offsetRoi, dU);
-//    const float3 pB = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellB + offsetRoi, dB);
-//
-//    // compute the average point based on neighbors (cg)
-//    float3 cg = float3(0.0f, 0.0f, 0.0f);
-//    float n = 0.0f;
-//
-//    if(dL > 0.0f) { cg = cg + pL; n++; }
-//    if(dR > 0.0f) { cg = cg + pR; n++; }
-//    if(dU > 0.0f) { cg = cg + pU; n++; }
-//    if(dB > 0.0f) { cg = cg + pB; n++; }
-//
-//    // if we have at least one valid depth
-//    if(n > 1.0f)
-//    {
-//        cg = cg / n; // average of x, y, depth
-//        float3 vcn = rcDeviceCamParams.C - p0;
-//        normalize(vcn);
-//        // pS: projection of cg on the line from p0 to camera
-//        const float3 pS = closestPointToLine3D(cg, p0, vcn);
-//        // keep the depth difference between pS and p0 as the smoothing step
-//        out.x = size(rcDeviceCamParams.C - pS) - d0;
-//    }
-//
-//    float e = 0.0f;
-//    n = 0.0f;
-//
-//    if(dL > 0.0f && dR > 0.0f)
-//    {
-//        // large angle between neighbors == flat area => low energy
-//        // small angle between neighbors == non-flat area => high energy
-//        e = fmaxf(e, (180.0f - angleBetwABandAC(p0, pL, pR)));
-//        n++;
-//    }
-//    if(dU > 0.0f && dB > 0.0f)
-//    {
-//        e = fmaxf(e, (180.0f - angleBetwABandAC(p0, pU, pB)));
-//        n++;
-//    }
-//    // the higher the energy, the less flat the area
-//    if(n > 0.0f)
-//        out.y = e;
+//    const float d0 = in_depth_tex.sample(textureSamplerX, float2(cell0.x, cell0.y)).x;
+    const float d0 = *get2DBufferAt(in_depthMap, in_depthMap_p, int(cell0.x), int(cell0.y));
+    // early exit: depth is <= 0
+    if(d0 <= 0.0f)
+    {
+//        out.y = 10.0f;
+        return out;
+    }
+        
 
+    // consider the neighbor pixels
+    const float2 cellL = cell0 + float2( 0.f, -1.f)/resolution; // Left
+    const float2 cellR = cell0 + float2( 0.f,  1.f)/resolution; // Right
+    const float2 cellU = cell0 + float2(-1.f,  0.f)/resolution; // Up
+    const float2 cellB = cell0 + float2( 1.f,  0.f)/resolution; // Bottom
+
+    // get associated depths from depth texture
+    // note: we do not use 0.5f offset because in_depth_tex use nearest neighbor interpolation
+//    const float dL = in_depth_tex.sample(textureSamplerX, float2(cellL.x, cellL.y)).x;
+//    const float dR = in_depth_tex.sample(textureSamplerX, float2(cellR.x, cellR.y)).x;
+//    const float dU = in_depth_tex.sample(textureSamplerX, float2(cellU.x, cellU.y)).x;
+//    const float dB = in_depth_tex.sample(textureSamplerX, float2(cellB.x, cellB.y)).x;
+    const float dL = *get2DBufferAt(in_depthMap, in_depthMap_p, int(cellL.x), int(cellL.y));
+    const float dR = *get2DBufferAt(in_depthMap, in_depthMap_p, int(cellR.x), int(cellR.y));
+    const float dU = *get2DBufferAt(in_depthMap, in_depthMap_p, int(cellU.x), int(cellU.y));
+    const float dB = *get2DBufferAt(in_depthMap, in_depthMap_p, int(cellB.x), int(cellB.y));
+
+    // get associated 3D points
+    const float3 p0 = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cell0 + offsetRoi, d0);
+    const float3 pL = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellL + offsetRoi, dL);
+    const float3 pR = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellR + offsetRoi, dR);
+    const float3 pU = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellU + offsetRoi, dU);
+    const float3 pB = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellB + offsetRoi, dB);
+
+    // compute the average point based on neighbors (cg)
+    float3 cg = float3(0.0f, 0.0f, 0.0f);
+    float n = 0.0f;
+
+    if(dL > 0.0f) { cg = cg + pL; n++; }
+    if(dR > 0.0f) { cg = cg + pR; n++; }
+    if(dU > 0.0f) { cg = cg + pU; n++; }
+    if(dB > 0.0f) { cg = cg + pB; n++; }
+
+    // if we have at least one valid depth
+    if(n > 1.0f)
+    {
+        cg = cg / n; // average of x, y, depth
+        float3 vcn = rcDeviceCamParams.C - p0;
+        vcn = normalize(vcn);
+        // pS: projection of cg on the line from p0 to camera
+        const float3 pS = closestPointToLine3D(cg, p0, vcn);
+        // keep the depth difference between pS and p0 as the smoothing step
+        out.x = length(rcDeviceCamParams.C - pS) - d0;
+    }
+
+    float e = 0.0f;
+    n = 0.0f;
+
+    if(dL > 0.0f && dR > 0.0f)
+    {
+        // large angle between neighbors == flat area => low energy
+        // small angle between neighbors == non-flat area => high energy
+        e = max(e, (180.0f - angleBetwABandAC(p0, pL, pR)));
+        n++;
+    }
+    if(dU > 0.0f && dB > 0.0f)
+    {
+        e = max(e, (180.0f - angleBetwABandAC(p0, pU, pB)));
+        n++;
+    }
+    // the higher the energy, the less flat the area
+    if(n > 0.0f)
+        out.y = e;
+    
     return out;
 }
 
@@ -245,10 +257,10 @@ kernel void computeSgmUpscaledDepthPixSizeMap_nearestNeighbor_kernel(device floa
     // corresponding output upscaled depth/pixSize map
     device float2* out_depthPixSize = get2DBufferAt(out_upscaledDepthPixSizeMap_d, out_upscaledDepthPixSizeMap_p, roiX, roiY);
 
-    constexpr sampler textureSampler (mag_filter::linear,
-                                      min_filter::linear);
+//    constexpr sampler textureSampler (mag_filter::linear,
+//                                      min_filter::linear);
     // filter masked pixels (alpha < 0.9f)
-    if(rcMipmapImage_tex.sample(textureSampler, float2((float(x) + 0.5f) / float(rcLevelWidth), (float(y) + 0.5f) / float(rcLevelHeight)), level(rcMipmapLevel)).w < 0.9f)
+    if(rcMipmapImage_tex.sample(textureSamplerX, float2((float(x) + 0.5f) / float(rcLevelWidth), (float(y) + 0.5f) / float(rcLevelHeight)), level(rcMipmapLevel)).w < 0.9f)
     {
         *out_depthPixSize = float2(-2.f, 0.f);
         return;
@@ -272,7 +284,7 @@ kernel void computeSgmUpscaledDepthPixSizeMap_nearestNeighbor_kernel(device floa
     const DeviceCameraParams& rcDeviceCamParams = constantCameraParametersArray_d[rcDeviceCameraParamsId[0]];
 
     // get rc 3d point
-    const float3 p = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, make_float2(float(x), float(y)), out_depthThickness.x);
+    const float3 p = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, float2(float(x), float(y)), out_depthThickness.x);
 
     // compute and write rc 3d point pixSize
     const float out_pixSize = computePixSize(rcDeviceCamParams, p);
@@ -319,7 +331,7 @@ kernel void computeSgmUpscaledDepthPixSizeMap_bilinear_kernel(device float2* out
 //    // filter masked pixels with alpha
 //    if(tex2DLod<float4>(rcMipmapImage_tex, (float(x) + 0.5f) / float(rcLevelWidth[0]), (float(y) + 0.5f) / float(rcLevelHeight[0]), rcMipmapLevel).w < SOFTVISION_DEPTHMAP_RC_MIN_ALPHA)
 //    {
-//        *out_depthPixSize = make_float2(-2.f, 0.f);
+//        *out_depthPixSize = float2(-2.f, 0.f);
 //        return;
 //    }
 //
@@ -394,7 +406,7 @@ kernel void computeSgmUpscaledDepthPixSizeMap_bilinear_kernel(device float2* out
 //    const DeviceCameraParams& rcDeviceCamParams = constantCameraParametersArray_d[rcDeviceCameraParamsId];
 //
 //    // get rc 3d point
-//    const float3 p = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, make_float2(float(x), float(y)), out_depthThickness.x);
+//    const float3 p = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, float2(float(x), float(y)), out_depthThickness.x);
 //
 //    // compute and write rc 3d point pixSize
 //    const float out_pixSize = computePixSize(rcDeviceCamParams, p);
@@ -542,98 +554,114 @@ kernel void optimize_varLofLABtoW_kernel(device float* out_varianceMap_d, consta
     *get2DBufferAt(out_varianceMap_d, out_varianceMap_p, roiX, roiY) = grad;
 }
 
-kernel void optimize_getOptDeptMapFromOptDepthSimMap_kernel(device float* out_tmpOptDepthMap_d, device int* out_tmpOptDepthMap_p,
-                                                            device     const float2* in_optDepthSimMap_d, device const int* in_optDepthSimMap_p,
-                                                            device const ROI_d* roi)
+kernel void optimize_getOptDeptMapFromOptDepthSimMap_kernel(device float* out_tmpOptDepthMap_d, constant int& out_tmpOptDepthMap_p,
+                                                            device const float2* in_optDepthSimMap_d, constant int& in_optDepthSimMap_p,
+                                                            constant ROI_d& roi,
+                                                            uint2 index [[thread_position_in_grid]])
 {
     // roi and depth/sim map part coordinates 
-//    const unsigned int roiX = blockIdx.x * blockDim.x + threadIdx.x;
-//    const unsigned int roiY = blockIdx.y * blockDim.y + threadIdx.y;
-//
-//    if(roiX >= roiWidth || roiY >= roiHeight)
-//        return;
-//
-//    *get2DBufferAt(out_tmpOptDepthMap_d, out_tmpOptDepthMap_p, roiX, roiY) = get2DBufferAt(in_optDepthSimMap_d, in_optDepthSimMap_p, roiX, roiY)->x; // depth
+    const unsigned int roiX = index.x;
+    const unsigned int roiY = index.y;
+
+    if(isBeyondROI(index, roi))
+        return;
+
+    *get2DBufferAt(out_tmpOptDepthMap_d, out_tmpOptDepthMap_p, roiX, roiY) = get2DBufferAt(in_optDepthSimMap_d, in_optDepthSimMap_p, roiX, roiY)->x; // depth
 }
 
-kernel void optimize_depthSimMap_kernel(device float2* out_optimizeDepthSimMap_d, constant int* out_optimizeDepthSimMap_p,         // output optimized depth/sim map
-                                           device const float2* in_sgmDepthPixSizeMap_d, constant int* in_sgmDepthPixSizeMap_p, // input upscaled rough depth/pixSize map
-                                           device const float2* in_refineDepthSimMap_d, constant  int* in_refineDepthSimMap_p,   // input fine depth/sim map
-                                        constant  int* rcDeviceCameraParamsId,
+kernel void optimize_depthSimMap_kernel(device float2* out_optimizeDepthSimMap_d, constant int& out_optimizeDepthSimMap_p,         // output optimized depth/sim map
+                                           device const float2* in_sgmDepthPixSizeMap_d, constant int& in_sgmDepthPixSizeMap_p, // input upscaled rough depth/pixSize map
+                                           device const float2* in_refineDepthSimMap_d, constant int& in_refineDepthSimMap_p,   // input fine depth/sim map
+                                        device const float* in_depthMap, constant int& in_depthMap_p,
+                                        constant DeviceCameraParams& rcDeviceCamParams,
                                             texture2d<half> imgVariance_tex[[texture(0)]],
-                                            texture2d<half> depth_tex[[texture(1)]],
-                                            constant int* iter,
-                                        constant ROI_d* roi,
-                                        uint2 index [[thread_position_in_threadgroup]])
+//                                            texture2d<half> depth_tex[[texture(1)]],
+                                            constant int& iter,
+                                        constant ROI_d& roi,
+                                        uint2 index [[thread_position_in_grid]])
 {
     // roi and imgVariance_tex, depth_tex coordinates
-//    const unsigned int roiX = index.x;
-//    const unsigned int roiY = index.y;
-//
-//    if(roiX >= roiWidth || roiY >= roiHeight)
-//        return;
-//
-//    // R camera parameters
+    const unsigned int roiX = index.x;
+    const unsigned int roiY = index.y;
+
+    if(isBeyondROI(index, roi))
+        return;
+
+    // R camera parameters
 //    const DeviceCameraParams& rcDeviceCamParams = constantCameraParametersArray_d[rcDeviceCameraParamsId];
-//
-//    // SGM upscale (rough) depth/pixSize
-//    const float2 sgmDepthPixSize = *get2DBufferAt(in_sgmDepthPixSizeMap_d, in_sgmDepthPixSizeMap_p, roiX, roiY);
-//    const float sgmDepth = sgmDepthPixSize.x;
-//    const float sgmPixSize = sgmDepthPixSize.y;
-//
-//    // refined and fused (fine) depth/sim
-//    const float2 refineDepthSim = *get2DBufferAt(in_refineDepthSimMap_d, in_refineDepthSimMap_p, roiX, roiY);
-//    const float refineDepth = refineDepthSim.x;
-//    const float refineSim = refineDepthSim.y;
-//
-//    // output optimized depth/sim
-//    float2* out_optDepthSimPtr = get2DBufferAt(out_optimizeDepthSimMap_d, out_optimizeDepthSimMap_p, roiX, roiY);
-//    float2 out_optDepthSim = (iter == 0) ? make_float2(sgmDepth, refineSim) : *out_optDepthSimPtr;
-//    const float depthOpt = out_optDepthSim.x;
-//
-//    if (depthOpt > 0.0f)
-//    {
-//        const float2 depthSmoothStepEnergy = getCellSmoothStepEnergy(rcDeviceCamParams, depth_tex, {float(roiX), float(roiY)}, {float(roi.x.begin), float(roi.y.begin)}); // (smoothStep, energy)
-//        float stepToSmoothDepth = depthSmoothStepEnergy.x;
-//        stepToSmoothDepth = copysignf(fminf(fabsf(stepToSmoothDepth), sgmPixSize / 10.0f), stepToSmoothDepth);
-//        const float depthEnergy = depthSmoothStepEnergy.y; // max angle with neighbors
-//        float stepToFineDM = refineDepth - depthOpt; // distance to refined/noisy input depth map
-//        stepToFineDM = copysignf(fminf(fabsf(stepToFineDM), sgmPixSize / 10.0f), stepToFineDM);
-//
-//        const float stepToRoughDM = sgmDepth - depthOpt; // distance to smooth/robust input depth map
+
+    // SGM upscale (rough) depth/pixSize
+    const float2 sgmDepthPixSize = *get2DBufferAt(in_sgmDepthPixSizeMap_d, in_sgmDepthPixSizeMap_p, roiX, roiY);
+    const float sgmDepth = sgmDepthPixSize.x;
+    const float sgmPixSize = sgmDepthPixSize.y; //0.000x
+
+    // refined and fused (fine) depth/sim
+    const float2 refineDepthSim = *get2DBufferAt(in_refineDepthSimMap_d, in_refineDepthSimMap_p, roiX, roiY);
+    const float refineDepth = refineDepthSim.x;
+    const float refineSim = refineDepthSim.y;
+
+    // output optimized depth/sim
+    device float2* out_optDepthSimPtr = get2DBufferAt(out_optimizeDepthSimMap_d, out_optimizeDepthSimMap_p, roiX, roiY);
+    float2 out_optDepthSim = (iter == 0) ? float2(sgmDepth, refineSim) : *out_optDepthSimPtr;
+    const float depthOpt = out_optDepthSim.x;
+
+    if (depthOpt > 0.0f)
+    {
+        float2 mapRes(1024.f, 1024.f);
+        const float2 depthSmoothStepEnergy = getCellSmoothStepEnergy(rcDeviceCamParams, in_depthMap, in_depthMap_p,
+                                                                     float2(float(roiX), float(roiY)),
+                                                                     float2(float(roi.lt.x), float(roi.lt.y)),
+                                                                     mapRes
+                                                                     ); // (smoothStep, energy)
+        float stepToSmoothDepth = depthSmoothStepEnergy.x;
+        stepToSmoothDepth = copysign(min(abs(stepToSmoothDepth), sgmPixSize / 10.0f), stepToSmoothDepth); //TODO: check copysign
+        const float depthEnergy = depthSmoothStepEnergy.y; // max angle with neighbors
+        float stepToFineDM = refineDepth - depthOpt; // distance to refined/noisy input depth map
+        stepToFineDM = copysign(min(abs(stepToFineDM), sgmPixSize / 10.0f), stepToFineDM);
+
+        const float stepToRoughDM = sgmDepth - depthOpt; // distance to smooth/robust input depth map
+//        constexpr sampler textureSampler (mag_filter::linear,
+//                                          min_filter::linear);
+        const float imgColorVariance = imgVariance_tex.sample(textureSamplerX, float2(float(roiX)/mapRes.x, float(roiY)/mapRes.y)).x;
 //        const float imgColorVariance = tex2D<float>(imgVariance_tex, float(roiX), float(roiY)); // do not use 0.5f offset because imgVariance_tex use nearest neighbor interpolation
-//        const float colorVarianceThresholdForSmoothing = 20.0f;
-//        const float angleThresholdForSmoothing = 30.0f; // 30
-//
-//        // https://www.desmos.com/calculator/kob9lxs9qf
-//        const float weightedColorVariance = sigmoid2(5.0f, angleThresholdForSmoothing, 40.0f, colorVarianceThresholdForSmoothing, imgColorVariance);
-//
-//        // https://www.desmos.com/calculator/jwhpjq6ppj
-//        const float fineSimWeight = sigmoid(0.0f, 1.0f, 0.7f, -0.7f, refineSim);
-//
-//        // if geometry variation is bigger than color variation => the fineDM is considered noisy
-//
-//        // if depthEnergy > weightedColorVariance   => energyLowerThanVarianceWeight=0 => smooth
-//        // else:                                    => energyLowerThanVarianceWeight=1 => use fineDM
-//        // weightedColorVariance max value is 30, so if depthEnergy > 30 (which means depthAngle < 150�) energyLowerThanVarianceWeight will be 0
-//        // https://www.desmos.com/calculator/jzbweilb85
-//        const float energyLowerThanVarianceWeight = sigmoid(0.0f, 1.0f, 30.0f, weightedColorVariance, depthEnergy); // TODO: 30 => 60
-//
-//        // https://www.desmos.com/calculator/ilsk7pthvz
-//        const float closeToRoughWeight = 1.0f - sigmoid(0.0f, 1.0f, 10.0f, 17.0f, fabsf(stepToRoughDM / sgmPixSize)); // TODO: 10 => 30
-//
-//        // f(z) = c1 * s1(z_rought - z)^2 + c2 * s2(z-z_fused)^2 + coeff3 * s3*(z-z_smooth)^2
-//
-//        const float depthOptStep = closeToRoughWeight * stepToRoughDM + // distance to smooth/robust input depth map
-//                                   (1.0f - closeToRoughWeight) * (energyLowerThanVarianceWeight * fineSimWeight * stepToFineDM + // distance to refined/noisy
-//                                                                 (1.0f - energyLowerThanVarianceWeight) * stepToSmoothDepth); // max angle in current depthMap
-//
-//        out_optDepthSim.x = depthOpt + depthOptStep;
-//
-//        out_optDepthSim.y = (1.0f - closeToRoughWeight) * (energyLowerThanVarianceWeight * fineSimWeight * refineSim + (1.0f - energyLowerThanVarianceWeight) * (depthEnergy / 20.0f));
-//    }
-//
-//    *out_optDepthSimPtr = out_optDepthSim;
+        const float colorVarianceThresholdForSmoothing = 20.0f;
+        const float angleThresholdForSmoothing = 30.0f; // 30
+
+        // https://www.desmos.com/calculator/kob9lxs9qf
+        const float weightedColorVariance = sigmoid2(5.0f, angleThresholdForSmoothing, 40.0f, colorVarianceThresholdForSmoothing, imgColorVariance);
+
+        // https://www.desmos.com/calculator/jwhpjq6ppj
+        const float fineSimWeight = sigmoid(0.0f, 1.0f, 0.7f, -0.7f, refineSim);
+
+        // if geometry variation is bigger than color variation => the fineDM is considered noisy
+
+        // if depthEnergy > weightedColorVariance   => energyLowerThanVarianceWeight=0 => smooth
+        // else:                                    => energyLowerThanVarianceWeight=1 => use fineDM
+        // weightedColorVariance max value is 30, so if depthEnergy > 30 (which means depthAngle < 150�) energyLowerThanVarianceWeight will be 0
+        // https://www.desmos.com/calculator/jzbweilb85
+        const float energyLowerThanVarianceWeight = sigmoid(0.0f, 1.0f, 30.0f, weightedColorVariance, depthEnergy); // TODO: 30 => 60
+
+        // https://www.desmos.com/calculator/ilsk7pthvz
+        const float closeToRoughWeight = 1.0f - sigmoid(0.0f, 1.0f, 10.0f, 17.0f, abs(stepToRoughDM / sgmPixSize)); // TODO: 10 => 30
+
+        // f(z) = c1 * s1(z_rought - z)^2 + c2 * s2(z-z_fused)^2 + coeff3 * s3*(z-z_smooth)^2
+
+        const float depthOptStep = closeToRoughWeight * stepToRoughDM + // distance to smooth/robust input depth map
+                                   (1.0f - closeToRoughWeight) * (energyLowerThanVarianceWeight * fineSimWeight * stepToFineDM + // distance to refined/noisy
+                                                                 (1.0f - energyLowerThanVarianceWeight) * stepToSmoothDepth); // max angle in current depthMap
+
+        out_optDepthSim.x = depthOpt + depthOptStep;
+
+        out_optDepthSim.y = (1.0f - closeToRoughWeight) * (energyLowerThanVarianceWeight * fineSimWeight * refineSim + (1.0f - energyLowerThanVarianceWeight) * (depthEnergy / 20.0f));
+        
+//        out_optDepthSim.y = (1.0f - closeToRoughWeight);// === 1 , wierd
+//        
+//        out_optDepthSim.y = energyLowerThanVarianceWeight * fineSimWeight * refineSim + (1.0f - energyLowerThanVarianceWeight) * (depthEnergy/*180*/ / 20.0f); //9
+//        
+//        out_optDepthSim.y = energyLowerThanVarianceWeight; //0
+    }
+
+    *out_optDepthSimPtr = out_optDepthSim;
 }
 
 } // namespace depthMap

@@ -168,7 +168,7 @@ inline float angleBetwV1andV2(const device float3& iV1, const device float3& iV2
     return abs(acos(V1.x * V2.x + V1.y * V2.y + V1.z * V2.z) / (M_PI_F / 180.0f));
 }
 
-inline float angleBetwABandAC(const device float3& A, const device float3& B, const device float3& C)
+inline float angleBetwABandAC(const thread float3& A, const thread float3& B, const thread float3& C)
 {
     float3 V1 = B - A;
     float3 V2 = C - A;
