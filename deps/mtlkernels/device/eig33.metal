@@ -227,6 +227,7 @@ static void cuda_tql2(float V0[], float V1[], float V2[], float d[], float e[])
 
                 g = d[l];
                 p = (d[l + 1] - g) / (2.0 * e[l]);
+                
                 r = cuda_hypot2(p, 1.0);
                 if(p < 0)
                 {

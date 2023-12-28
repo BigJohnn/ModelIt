@@ -6,17 +6,18 @@
 
 #include <depthMap/gpu/planeSweeping/similarity.hpp>
 #include <mvsData/ROI_d.hpp>
-//#include <depthMap/gpu/device/BufPtr.metal>
-//#include <depthMap/gpu/device/Patch.metal>
-
-//#include "ROI_d.hpp"
-//#include "similarity.hpp"
 #include "../device/BufPtr.metal"
 #include "../device/Patch.metal"
 
 
 namespace depthMap {
 
+bool isBeyondROI(thread uint3& index, constant ROI_d& roi){
+    unsigned int roiWidth = roi.rb.x - roi.lt.x;
+    unsigned int roiHeight = roi.rb.y - roi.lt.y;
+    return (index.x >= roiWidth || index.y >= roiHeight);
+}
+    
 void move3DPointByRcPixSize(thread float3& p,
                                               constant DeviceCameraParams& rcDeviceCamParams,
                                               const float rcPixSize)
@@ -79,8 +80,6 @@ kernel void volume_init_kernel_refine(device TSimRefine* inout_volume_d, constan
 
     *get3DBufferAt(inout_volume_d, inout_volume_s, inout_volume_p, vx, vy, vz) = value;
 }
-
-//    template device TSim* get3DBufferAt(device TSim* ptr, constant int& spitch, constant int& pitch, unsigned x, unsigned y, unsigned z);
 
 kernel void volume_add_kernel(device TSimRefine* inout_volume_d, device int* inout_volume_s, device int* inout_volume_p,
                               device const TSimRefine* in_volume_d, device const int* in_volume_s, device const int* in_volume_p,
@@ -441,15 +440,12 @@ kernel void volume_retrieveBestDepth_kernel(device float2* out_sgmDepthThickness
 {
     const unsigned int vx = index.x;
     const unsigned int vy = index.y;
-
-    unsigned int roiWidth = roi.rb.x - roi.lt.x; //90
-    unsigned int roiHeight = roi.rb.y - roi.lt.y; //160
     
-    if(vx >= roiWidth || vy >= roiHeight)
+    if(isBeyondROI(index, roi))
         return;
 
     // corresponding image coordinates
-    const float2 pix{float((roi.lt.x + vx) * scaleStep), float((roi.lt.y + vy) * scaleStep)};
+    const float2 pix = float2(float((roi.lt.x + vx) * scaleStep), float((roi.lt.y + vy) * scaleStep));
 
     // corresponding output depth/thickness pointer
     device float2* out_bestDepthThicknessPtr = get2DBufferAt(out_sgmDepthThicknessMap_d, out_sgmDepthThicknessMap_p, vx, vy);

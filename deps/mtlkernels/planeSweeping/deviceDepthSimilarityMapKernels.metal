@@ -173,9 +173,7 @@ kernel void depthThicknessMapSmoothThickness_kernel(device float2* inout_depthTh
     const unsigned int roiX = index.x;
     const unsigned int roiY = index.y;
 
-    float roiWidth = roi.rb.x-roi.lt.x;
-    float roiHeight = roi.rb.y-roi.lt.y;
-    if(roiX >= roiWidth || roiY >= roiHeight)
+    if(isBeyondROI(index, roi))
         return;
 
     // corresponding output depth/thickness (depth unchanged)
@@ -192,6 +190,8 @@ kernel void depthThicknessMapSmoothThickness_kernel(device float2* inout_depthTh
     float sumCenterDepthDist = 0.f;
     int nbValidPatchPixels = 0;
 
+    float roiWidth = roi.rb.x-roi.lt.x;
+    float roiHeight = roi.rb.y-roi.lt.y;
     // patch 3x3
     for(int yp = -1; yp <= 1; ++yp)
     {
@@ -301,7 +301,6 @@ kernel void computeSgmUpscaledDepthPixSizeMap_nearestNeighbor_kernel(device floa
 kernel void computeSgmUpscaledDepthPixSizeMap_bilinear_kernel(device float2* out_upscaledDepthPixSizeMap_d, constant int& out_upscaledDepthPixSizeMap_p,
                                                               device const float2* in_sgmDepthThicknessMap_d, constant int& in_sgmDepthThicknessMap_p,
                                                                   constant DeviceCameraParams& rcDeviceCameraParams, // useful for direct pixSize computation
-//                                                                  const cudaTextureObject_t rcMipmapImage_tex,
                                                                   texture2d<half> rcMipmapImage_tex [[ texture(0) ]],
                                                               constant unsigned int& rcLevelWidth,
                                                               constant unsigned int& rcLevelHeight,
@@ -310,114 +309,114 @@ kernel void computeSgmUpscaledDepthPixSizeMap_bilinear_kernel(device float2* out
                                                               constant int& halfNbDepths,
                                                               constant float& ratio,
                                                               constant ROI_d& roi,
-                                                                  uint2 index [[thread_position_in_threadgroup]])
+                                                              uint2 index [[thread_position_in_grid]])
 {
-//    const unsigned int roiX = index.x;
-//    const unsigned int roiY = index.y;
-//
-//    unsigned int roiWidth = roi.rb.x - roi.lt.x;
-//    unsigned int roiHeight = roi.rb.y - roi.lt.y;
-//
-//    if(roiX >= roiWidth || roiY >= roiHeight)
-//        return;
-//
-//    // corresponding image coordinates
-//    const unsigned int x = (roi.x.begin + roiX) * (unsigned int)(stepXY[0]);
-//    const unsigned int y = (roi.y.begin + roiY) * (unsigned int)(stepXY[0]);
-//
-//    // corresponding output upscaled depth/pixSize map
-//    float2* out_depthPixSize = get2DBufferAt(out_upscaledDepthPixSizeMap_d, out_upscaledDepthPixSizeMap_p, roiX, roiY);
-//
-//    // filter masked pixels with alpha
-//    if(tex2DLod<float4>(rcMipmapImage_tex, (float(x) + 0.5f) / float(rcLevelWidth[0]), (float(y) + 0.5f) / float(rcLevelHeight[0]), rcMipmapLevel).w < SOFTVISION_DEPTHMAP_RC_MIN_ALPHA)
-//    {
-//        *out_depthPixSize = float2(-2.f, 0.f);
-//        return;
-//    }
-//
-//    // find adjacent pixels
-//    const float oy = (float(roiY) - 0.5f) * ratio;
-//    const float ox = (float(roiX) - 0.5f) * ratio;
-//
-//    int xp = floor(ox);
-//    int yp = floor(oy);
-//
-//    xp = min(xp, int(roiWidth  * ratio) - 2);
-//    yp = min(yp, int(roiHeight * ratio) - 2);
-//
-//    const float2 lu = *get2DBufferAt(in_sgmDepthThicknessMap_d, in_sgmDepthThicknessMap_p, xp, yp);
-//    const float2 ru = *get2DBufferAt(in_sgmDepthThicknessMap_d, in_sgmDepthThicknessMap_p, xp + 1, yp);
-//    const float2 rd = *get2DBufferAt(in_sgmDepthThicknessMap_d, in_sgmDepthThicknessMap_p, xp + 1, yp + 1);
-//    const float2 ld = *get2DBufferAt(in_sgmDepthThicknessMap_d, in_sgmDepthThicknessMap_p, xp, yp + 1);
-//
-//    // find corresponding depth/thickness
-//    float2 out_depthThickness;
-//
-//    if(lu.x <= 0.0f || ru.x <= 0.0f || rd.x <= 0.0f || ld.x <= 0.0f)
-//    {
-//        // at least one corner depth is invalid
-//        // average the other corners to get a proper depth/thickness
-//        float2 sumDepthThickness = {0.0f, 0.0f};
-//        int count = 0;
-//
-//        if(lu.x > 0.0f)
-//        {
-//            sumDepthThickness = sumDepthThickness + lu;
-//            ++count;
-//        }
-//        if(ru.x > 0.0f)
-//        {
-//            sumDepthThickness = sumDepthThickness + ru;
-//            ++count;
-//        }
-//        if(rd.x > 0.0f)
-//        {
-//            sumDepthThickness = sumDepthThickness + rd;
-//            ++count;
-//        }
-//        if(ld.x > 0.0f)
-//        {
-//            sumDepthThickness = sumDepthThickness + ld;
-//            ++count;
-//        }
-//        if(count != 0)
-//        {
-//            out_depthThickness = {sumDepthThickness.x / float(count), sumDepthThickness.y / float(count)};
-//        }
-//        else
-//        {
-//            // invalid depth
-//            *out_depthPixSize = {-1.0f, 1.0f};
-//            return;
-//        }
-//    }
-//    else
-//    {
-//        // bilinear interpolation
-//        const float ui = ox - float(xp);
-//        const float vi = oy - float(yp);
-//        const float2 u = lu + (ru - lu) * ui;
-//        const float2 d = ld + (rd - ld) * ui;
-//        out_depthThickness = u + (d - u) * vi;
-//    }
-//
-//#ifdef ALICEVISION_DEPTHMAP_COMPUTE_PIXSIZEMAP
-//    // R camera parameters
-//    const DeviceCameraParams& rcDeviceCamParams = constantCameraParametersArray_d[rcDeviceCameraParamsId];
-//
-//    // get rc 3d point
-//    const float3 p = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, float2(float(x), float(y)), out_depthThickness.x);
-//
-//    // compute and write rc 3d point pixSize
-//    const float out_pixSize = computePixSize(rcDeviceCamParams, p);
-//#else
-//    // compute pixSize from depth thickness
-//    const float out_pixSize = out_depthThickness.y / halfNbDepths;
-//#endif
-//
-//    // write output depth/pixSize
-//    out_depthPixSize->x = out_depthThickness.x;
-//    out_depthPixSize->y = out_pixSize;
+    const unsigned int roiX = index.x;
+    const unsigned int roiY = index.y;
+
+    unsigned int roiWidth = roi.rb.x - roi.lt.x;
+    unsigned int roiHeight = roi.rb.y - roi.lt.y;
+
+    if(isBeyondROI(index, roi))
+        return;
+
+    // corresponding image coordinates
+    const unsigned int x = (roi.lt.x + roiX) * (unsigned int)(stepXY);
+    const unsigned int y = (roi.lt.y + roiY) * (unsigned int)(stepXY);
+
+    // corresponding output upscaled depth/pixSize map
+    device float2* out_depthPixSize = get2DBufferAt(out_upscaledDepthPixSizeMap_d, out_upscaledDepthPixSizeMap_p, roiX, roiY);
+
+    // filter masked pixels with alpha
+    if(rcMipmapImage_tex.sample(textureSamplerX, float2((float(x) + 0.5f) / float(rcLevelWidth), (float(y) + 0.5f) / float(rcLevelHeight)), level(rcMipmapLevel)).w < SOFTVISION_DEPTHMAP_RC_MIN_ALPHA)
+    {
+        *out_depthPixSize = float2(-2.f, 0.f);
+        return;
+    }
+
+    // find adjacent pixels
+    const float oy = (float(roiY) - 0.5f) * ratio;
+    const float ox = (float(roiX) - 0.5f) * ratio;
+
+    int xp = floor(ox);
+    int yp = floor(oy);
+
+    xp = min(xp, int(roiWidth  * ratio) - 2);
+    yp = min(yp, int(roiHeight * ratio) - 2);
+
+    const float2 lu = *get2DBufferAt(in_sgmDepthThicknessMap_d, in_sgmDepthThicknessMap_p, xp, yp);
+    const float2 ru = *get2DBufferAt(in_sgmDepthThicknessMap_d, in_sgmDepthThicknessMap_p, xp + 1, yp);
+    const float2 rd = *get2DBufferAt(in_sgmDepthThicknessMap_d, in_sgmDepthThicknessMap_p, xp + 1, yp + 1);
+    const float2 ld = *get2DBufferAt(in_sgmDepthThicknessMap_d, in_sgmDepthThicknessMap_p, xp, yp + 1);
+
+    // find corresponding depth/thickness
+    float2 out_depthThickness;
+
+    if(lu.x <= 0.0f || ru.x <= 0.0f || rd.x <= 0.0f || ld.x <= 0.0f)
+    {
+        // at least one corner depth is invalid
+        // average the other corners to get a proper depth/thickness
+        float2 sumDepthThickness = float2(0.0f, 0.0f);
+        int count = 0;
+
+        if(lu.x > 0.0f)
+        {
+            sumDepthThickness = sumDepthThickness + lu;
+            ++count;
+        }
+        if(ru.x > 0.0f)
+        {
+            sumDepthThickness = sumDepthThickness + ru;
+            ++count;
+        }
+        if(rd.x > 0.0f)
+        {
+            sumDepthThickness = sumDepthThickness + rd;
+            ++count;
+        }
+        if(ld.x > 0.0f)
+        {
+            sumDepthThickness = sumDepthThickness + ld;
+            ++count;
+        }
+        if(count != 0)
+        {
+            out_depthThickness = {sumDepthThickness.x / float(count), sumDepthThickness.y / float(count)};
+        }
+        else
+        {
+            // invalid depth
+            *out_depthPixSize = {-1.0f, 1.0f};
+            return;
+        }
+    }
+    else
+    {
+        // bilinear interpolation
+        const float ui = ox - float(xp);
+        const float vi = oy - float(yp);
+        const float2 u = lu + (ru - lu) * ui;
+        const float2 d = ld + (rd - ld) * ui;
+        out_depthThickness = u + (d - u) * vi;
+    }
+
+#ifdef ALICEVISION_DEPTHMAP_COMPUTE_PIXSIZEMAP
+    // R camera parameters
+    const DeviceCameraParams& rcDeviceCamParams = constantCameraParametersArray_d[rcDeviceCameraParamsId];
+
+    // get rc 3d point
+    const float3 p = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, float2(float(x), float(y)), out_depthThickness.x);
+
+    // compute and write rc 3d point pixSize
+    const float out_pixSize = computePixSize(rcDeviceCamParams, p);
+#else
+    // compute pixSize from depth thickness
+    const float out_pixSize = out_depthThickness.y / halfNbDepths;
+#endif
+
+    // write output depth/pixSize
+    out_depthPixSize->x = out_depthThickness.x;
+    out_depthPixSize->y = out_pixSize;
 }
 
 //template<int TWsh>
@@ -432,9 +431,7 @@ kernel void depthSimMapComputeNormal_kernel(device float3* out_normalMap_d, cons
     const unsigned int roiX = index.x;
     const unsigned int roiY = index.y;
 
-    unsigned int roiWidth = roi.rb.x - roi.lt.x;
-    unsigned int roiHeight = roi.rb.y - roi.lt.y;
-    if(roiX >= roiWidth || roiY >= roiHeight)
+    if(isBeyondROI(index, roi))
         return;
     
     // corresponding image coordinates
