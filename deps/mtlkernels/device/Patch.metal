@@ -645,8 +645,9 @@ inline float compNCCby3DptsYK(constant DeviceCameraParams& rcDeviceCamParams,
     constexpr sampler textureSampler (mag_filter::linear,
                                       min_filter::linear);
 
-    const half4 rcCenterColor = rcMipmapImage_tex.sample(textureSampler, float2((rp.x + 0.5f) * rcInvLevelWidth, (rp.y + 0.5f) * rcInvLevelHeight), level(rcMipmapLevel));
-    const half4 tcCenterColor = tcMipmapImage_tex.sample(textureSampler, float2((tp.x + 0.5f) * tcInvLevelWidth, (tp.y + 0.5f) * tcInvLevelHeight), level(tcMipmapLevel));
+    half4 colorScale = 255.f;
+    const half4 rcCenterColor = rcMipmapImage_tex.sample(textureSampler, float2((rp.x + 0.5f) * rcInvLevelWidth, (rp.y + 0.5f) * rcInvLevelHeight), level(rcMipmapLevel)) * colorScale;
+    const half4 tcCenterColor = tcMipmapImage_tex.sample(textureSampler, float2((tp.x + 0.5f) * tcInvLevelWidth, (tp.y + 0.5f) * tcInvLevelHeight), level(tcMipmapLevel)) * colorScale;
     
     // check the alpha values of the patch pixel center of the R and T cameras
     if(rcCenterColor.w < SOFTVISION_DEPTHMAP_RC_MIN_ALPHA || tcCenterColor.w < SOFTVISION_DEPTHMAP_TC_MIN_ALPHA)
@@ -667,8 +668,8 @@ inline float compNCCby3DptsYK(constant DeviceCameraParams& rcDeviceCamParams,
             const float2 tpc = project3DPoint(tcDeviceCamParams.P, p);
 
             // get R and T image color (CIELAB) from 2d coordinates
-            const half4 rcPatchCoordColor = rcMipmapImage_tex.sample(textureSampler, float2((rpc.x + 0.5f) * rcInvLevelWidth, (rpc.y + 0.5f) * rcInvLevelHeight), level(rcMipmapLevel));
-            const half4 tcPatchCoordColor = tcMipmapImage_tex.sample(textureSampler, float2((tpc.x + 0.5f) * tcInvLevelWidth, (tpc.y + 0.5f) * tcInvLevelHeight), level(tcMipmapLevel));
+            const half4 rcPatchCoordColor = rcMipmapImage_tex.sample(textureSampler, float2((rpc.x + 0.5f) * rcInvLevelWidth, (rpc.y + 0.5f) * rcInvLevelHeight), level(rcMipmapLevel)) * colorScale;
+            const half4 tcPatchCoordColor = tcMipmapImage_tex.sample(textureSampler, float2((tpc.x + 0.5f) * tcInvLevelWidth, (tpc.y + 0.5f) * tcInvLevelHeight), level(tcMipmapLevel)) * colorScale;
 
             // compute weighting based on:
             // - color difference to the center pixel of the patch:

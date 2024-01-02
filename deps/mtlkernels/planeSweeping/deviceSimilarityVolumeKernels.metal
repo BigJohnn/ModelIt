@@ -166,18 +166,10 @@ kernel void volume_computeSimilarity_kernel(device TSim* out_volume1st_d, consta
     // corresponding image coordinates, discrete sample
     const float x = float(roi.lt.x + vx) * float(stepXY); //180
     const float y = float(roi.lt.y + vy) * float(stepXY); // 320
-    
-//    device TSim* fsim_1st = get3DBufferAt(out_volume1st_d, out_volume1st_s, out_volume1st_p, (vx), (vy), (vz));
-//    device TSim* fsim_1st = get3DBufferAt(out_volume1st_d, out_volume1st_s, out_volume1st_p, (0), (0), (0));
-//    *fsim_1st = TSim(122);
 
     // corresponding depth plane
     float depthPlane = *get2DBufferAt((device float*)in_depths_d, in_depths_p, vz, 0);
 
-//    device TSim* xx = get3DBufferAt(out_volume1st_d, out_volume1st_s, out_volume1st_p, (vx), (vy), (vz));
-//    *xx = TSim(166);
-    
-//    return;
     // compute patch
     Patch patch;
     volume_computePatch(patch, rcDeviceCamParams, tcDeviceCamParams, depthPlane, float2(x, y));
@@ -644,9 +636,6 @@ kernel void volume_initVolumeYSlice_kernel(device TSim* volume_d, constant int& 
     if ((x >= 0) && (x < volDim[axisT.x]) && (z >= 0) && (z < volDim[axisT.z]))
     {
         *get3DBufferAt(volume_d, volume_s, volume_p, v.x, v.y, v.z) = cst;//ok
-//        TSim cc = cst;//ok
-//        *o = cc; //error
-//        *o = (TSim)255; //ok
     }
 }
 
