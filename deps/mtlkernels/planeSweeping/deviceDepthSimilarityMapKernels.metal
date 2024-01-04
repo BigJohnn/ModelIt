@@ -47,11 +47,12 @@ float2 getCellSmoothStepEnergy(constant DeviceCameraParams& rcDeviceCamParams,
     }
         
 
+    float scale = 4.0f;
     // consider the neighbor pixels
-    const float2 cellL = cell0 + float2( 0.f, -1.f)/resolution; // Left
-    const float2 cellR = cell0 + float2( 0.f,  1.f)/resolution; // Right
-    const float2 cellU = cell0 + float2(-1.f,  0.f)/resolution; // Up
-    const float2 cellB = cell0 + float2( 1.f,  0.f)/resolution; // Bottom
+    const float2 cellL = cell0 + float2( 0.f, -1.f) * scale; // Left
+    const float2 cellR = cell0 + float2( 0.f,  1.f) * scale; // Right
+    const float2 cellU = cell0 + float2(-1.f,  0.f) * scale; // Up
+    const float2 cellB = cell0 + float2( 1.f,  0.f) * scale; // Bottom
 
     // get associated depths from depth texture
     // note: we do not use 0.5f offset because in_depth_tex use nearest neighbor interpolation
@@ -71,7 +72,7 @@ float2 getCellSmoothStepEnergy(constant DeviceCameraParams& rcDeviceCamParams,
     const float3 pU = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellU + offsetRoi, dU);
     const float3 pB = get3DPointForPixelAndDepthFromRC(rcDeviceCamParams, cellB + offsetRoi, dB);
 
-    // compute the average point based on neighbors (cg)
+    // compute the average point based on neighbors (cg, center of geometry)
     float3 cg = float3(0.0f, 0.0f, 0.0f);
     float n = 0.0f;
 
@@ -518,10 +519,6 @@ kernel void optimize_varLofLABtoW_kernel(device float* out_varianceMap_d, consta
     const unsigned int roiX = index.x;
     const unsigned int roiY = index.y;
 
-//    unsigned int roiWidth = roi.rb.x - roi.lt.x;
-//    unsigned int roiHeight = roi.rb.y - roi.lt.y;
-//    if(roiX >= roiWidth || roiY >= roiHeight)
-//        return;
     if(isBeyondROI(index, roi)) return;
 
     // corresponding image coordinates
@@ -538,14 +535,17 @@ kernel void optimize_varLofLABtoW_kernel(device float* out_varianceMap_d, consta
     constexpr sampler textureSampler (mag_filter::linear,
                                       min_filter::linear);
 //    rcMipmapImage_tex.sample(textureSampler,
-    const float xM1 = rcMipmapImage_tex.sample(textureSampler, float2(((x - 1.f) + 0.5f) * invLevelWidth, ((y + 0.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).x;
-    const float xP1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 1.f) + 0.5f) * invLevelWidth, ((y + 0.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).x;
-    const float yM1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 0.f) + 0.5f) * invLevelWidth, ((y - 1.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).x;
-    const float yP1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 0.f) + 0.5f) * invLevelWidth, ((y + 1.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).x;
+    float scale = 255.f; //0~1 => 0~255, check, 是否多此一举？
+    const float xM1 = rcMipmapImage_tex.sample(textureSampler, float2(((x - 1.f) + 0.5f) * invLevelWidth, ((y + 0.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).r * scale;
+    const float xP1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 1.f) + 0.5f) * invLevelWidth, ((y + 0.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).r * scale;
+    const float yM1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 0.f) + 0.5f) * invLevelWidth, ((y - 1.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).r * scale;
+    const float yP1 = rcMipmapImage_tex.sample(textureSampler, float2(((x + 0.f) + 0.5f) * invLevelWidth, ((y + 1.f) + 0.5f) * invLevelHeight), level(rcMipmapLevel)).r * scale;
 
+    
     const float2 g = float2(xM1 - xP1, yM1 - yP1); // TODO: not divided by 2?
-//    const float grad = size(g);
+
     const float grad = length(g);
+    
 
     // write output
     *get2DBufferAt(out_varianceMap_d, out_varianceMap_p, roiX, roiY) = grad;
@@ -619,16 +619,16 @@ kernel void optimize_depthSimMap_kernel(device float2* out_optimizeDepthSimMap_d
         const float stepToRoughDM = sgmDepth - depthOpt; // distance to smooth/robust input depth map
 //        constexpr sampler textureSampler (mag_filter::linear,
 //                                          min_filter::linear);
-        const float imgColorVariance = imgVariance_tex.sample(textureSamplerX, float2(float(roiX)/mapRes.x, float(roiY)/mapRes.y)).x;
+        const float imgColorVariance = imgVariance_tex.sample(textureSamplerX, float2(float(roiX)/mapRes.x, float(roiY)/mapRes.y)).x; //0~255
 //        const float imgColorVariance = tex2D<float>(imgVariance_tex, float(roiX), float(roiY)); // do not use 0.5f offset because imgVariance_tex use nearest neighbor interpolation
         const float colorVarianceThresholdForSmoothing = 20.0f;
         const float angleThresholdForSmoothing = 30.0f; // 30
 
         // https://www.desmos.com/calculator/kob9lxs9qf
-        const float weightedColorVariance = sigmoid2(5.0f, angleThresholdForSmoothing, 40.0f, colorVarianceThresholdForSmoothing, imgColorVariance);
+        const float weightedColorVariance = sigmoid2(5.0f, angleThresholdForSmoothing, 40.0f, colorVarianceThresholdForSmoothing, imgColorVariance); //5~30
 
         // https://www.desmos.com/calculator/jwhpjq6ppj
-        const float fineSimWeight = sigmoid(0.0f, 1.0f, 0.7f, -0.7f, refineSim);
+        const float fineSimWeight = sigmoid(0.0f, 1.0f, 0.7f, -0.7f, refineSim); // -1~0 => 1~0
 
         // if geometry variation is bigger than color variation => the fineDM is considered noisy
 
@@ -639,7 +639,7 @@ kernel void optimize_depthSimMap_kernel(device float2* out_optimizeDepthSimMap_d
         const float energyLowerThanVarianceWeight = sigmoid(0.0f, 1.0f, 30.0f, weightedColorVariance, depthEnergy); // TODO: 30 => 60
 
         // https://www.desmos.com/calculator/ilsk7pthvz
-        const float closeToRoughWeight = 1.0f - sigmoid(0.0f, 1.0f, 10.0f, 17.0f, abs(stepToRoughDM / sgmPixSize)); // TODO: 10 => 30
+        const float closeToRoughWeight = 1.0f - sigmoid(0.0f, 1.0f, 10.0f, 17.0f, abs(stepToRoughDM / sgmPixSize) /*0~9.8*/); // TODO: 10 => 30
 
         // f(z) = c1 * s1(z_rought - z)^2 + c2 * s2(z-z_fused)^2 + coeff3 * s3*(z-z_smooth)^2
 
@@ -651,11 +651,25 @@ kernel void optimize_depthSimMap_kernel(device float2* out_optimizeDepthSimMap_d
 
         out_optDepthSim.y = (1.0f - closeToRoughWeight) * (energyLowerThanVarianceWeight * fineSimWeight * refineSim + (1.0f - energyLowerThanVarianceWeight) * (depthEnergy / 20.0f));
         
+        
+//        out_optDepthSim.y = weightedColorVariance;
+//        out_optDepthSim.y = abs(stepToRoughDM / sgmPixSize);
+        
 //        out_optDepthSim.y = (1.0f - closeToRoughWeight);// === 1 , wierd
 //        
 //        out_optDepthSim.y = energyLowerThanVarianceWeight * fineSimWeight * refineSim + (1.0f - energyLowerThanVarianceWeight) * (depthEnergy/*180*/ / 20.0f); //9
 //        
-//        out_optDepthSim.y = energyLowerThanVarianceWeight; //0
+//        out_optDepthSim.y = energyLowerThanVarianceWeight * fineSimWeight * refineSim; //-3 ~ 0
+//        out_optDepthSim.y = (1.0f - energyLowerThanVarianceWeight) * (depthEnergy / 20.0f);//0~8
+//        out_optDepthSim.y = depthEnergy / 20.0f; //3~8
+//        
+//        out_optDepthSim.y = energyLowerThanVarianceWeight;//0~1
+//        
+//        out_optDepthSim.y = stepToRoughDM;//-0.3~0.3
+//        
+//        out_optDepthSim.y = fineSimWeight;//0~1
+//        
+//        out_optDepthSim.y = refineSim;
     }
 
     *out_optDepthSimPtr = out_optDepthSim;

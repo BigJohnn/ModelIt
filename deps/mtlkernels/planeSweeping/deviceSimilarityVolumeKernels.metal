@@ -551,9 +551,7 @@ kernel void volume_refineBestDepth_kernel(device float2* out_refineDepthSimMap_d
     const unsigned int vx = index.x;
     const unsigned int vy = index.y;
 
-    unsigned int roiWidth = roi.rb.x - roi.lt.x;
-    unsigned int roiHeight = roi.rb.y - roi.lt.y;
-    if(vx >= roiWidth || vy >= roiHeight)
+    if(isBeyondROI(index, roi))
         return;
 
     // corresponding input sgm depth/pixSize (middle depth)
@@ -598,7 +596,7 @@ kernel void volume_refineBestDepth_kernel(device float2* out_refineDepthSimMap_d
             // see: https://www.desmos.com/calculator/ribalnoawq
             sampleSim += simSum * exp(-((zs - sample) * (zs - sample)) / twoTimesSigmaPowerTwo);
         }
-
+        
         if(sampleSim < bestSampleSim)
         {
             bestSampleOffsetIndex = sample;
@@ -746,35 +744,13 @@ kernel void volume_agregateCostVolumeAtXinSlices_kernel(texture2d<half> rcMipmap
 
 //          const float4 gcr0 = tex2DLod<float4>(rcMipmapImage_tex, (float(imX0) + 0.5f) / float(rcSgmLevelWidth), (float(imY0) + 0.5f) / float(rcSgmLevelHeight), rcMipmapLevel);
 //          const float4 gcr1 = tex2DLod<float4>(rcMipmapImage_tex, (float(imX1) + 0.5f) / float(rcSgmLevelWidth), (float(imY1) + 0.5f) / float(rcSgmLevelHeight), rcMipmapLevel);
-            half4 gcr0 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX0) + 0.5f) / float(rcSgmLevelWidth), (float(imY0) + 0.5f) / float(rcSgmLevelHeight)), level(rcMipmapLevel));
-            half4 gcr1 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX1) + 0.5f) / float(rcSgmLevelWidth), (float(imY1) + 0.5f) / float(rcSgmLevelHeight)), level(rcMipmapLevel));
             
-//            gcr0.xy = half2((float(imX0) + 0.5f) / float(rcSgmLevelWidth), (float(imY0) + 0.5f) / float(rcSgmLevelHeight));
-            
-//            const half4 gcr0 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX0) + 0.5f) / float(1), (float(imY0) + 0.5f) / float(1)), level(rcMipmapLevel));
-//            const half4 gcr1 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX1) + 0.5f) / float(1), (float(imY1) + 0.5f) / float(1)), level(rcMipmapLevel));
-            
-            ///test
-//            const half4 gcr0 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX0) + 0.5f) / float(rcSgmLevelWidth), (float(imY0) + 0.5f)/ float(rcSgmLevelHeight)),0);
-//            const half4 gcr1 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX1) + 0.5f)/ float(rcSgmLevelWidth), (float(imY1) + 0.5f)/float(rcSgmLevelHeight) ),0);
-//            const half4 gcr0 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX0) + 0.5f), (float(imY0) + 0.5f)));
-//            const half4 gcr1 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX1) + 0.5f), (float(imY1) + 0.5f)));
-            
+            half4 colorScale = 255.f; //TODO: check
+            half4 gcr0 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX0) + 0.5f) / float(rcSgmLevelWidth), (float(imY0) + 0.5f) / float(rcSgmLevelHeight)), level(rcMipmapLevel)) * colorScale;
+            half4 gcr1 = rcMipmapImage_tex.sample(textureSampler, float2((float(imX1) + 0.5f) / float(rcSgmLevelWidth), (float(imY1) + 0.5f) / float(rcSgmLevelHeight)), level(rcMipmapLevel)) * colorScale;
+                        
           const float deltaC = float(distance(gcr0, gcr1));
             
-//            {
-//                device TSim* volume_xyz = get3DBufferAt(volAgr_d, volAgr_s, volAgr_p, v.x, v.y, v.z);
-////                const float val = (float(*volume_xyz) * float(filteringIndex) + pathCost) / float(filteringIndex + 1);
-////                *volume_xyz = TSim((float(imX0) + 0.5f) / float(512.0f) * 255.f);
-//                
-//                *volume_xyz = TSim(gcr0.x * 255.f);
-//                
-////
-////                *volume_xyz = TSim(150);
-////                return;
-//            }
-            
-
           // sigmoid f(x) = i + (a - i) * (1 / ( 1 + e^(10 * (x - P2) / w)))
           // see: https://www.desmos.com/calculator/1qvampwbyx
           // best values found from tests: i = 80, a = 255, w = 80, P2 = 100
@@ -804,8 +780,6 @@ kernel void volume_agregateCostVolumeAtXinSlices_kernel(texture2d<half> rcMipmap
     device TSim* volume_xyz = get3DBufferAt(volAgr_d, volAgr_s, volAgr_p, v.x, v.y, v.z);
     const float val = (float(*volume_xyz) * float(filteringIndex) + pathCost) / float(filteringIndex + 1);
     *volume_xyz = TSim(val);
-    
-//    *volume_xyz = TSim(123);
 }
 
 } // namespace depthMap
