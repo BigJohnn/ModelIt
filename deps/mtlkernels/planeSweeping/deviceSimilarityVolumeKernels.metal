@@ -580,17 +580,17 @@ kernel void volume_refineBestDepth_kernel(device float2* out_refineDepthSimMap_d
         for(int vz = 0; vz < volDimZ; ++vz)
         {
             const int rz = (vz - halfNbDepths);    // relative depth index offset
-            const int zs = rz * samplesPerPixSize; // relative sample offset
+            const int zs = rz * samplesPerPixSize/*10*/; // relative sample offset
 
             // get the inverted similarity sum value
             // best value is the HIGHEST
             // worst value is 0
-            const float invSimSum = *get3DBufferAt(in_volSim_d, in_volSim_s, in_volSim_p, vx, vy, vz);
+            const float invSimSum = *get3DBufferAt(in_volSim_d, in_volSim_s, in_volSim_p, vx, vy, vz); // 0~1
 
             // reverse the inverted similarity sum value
             // best value is the LOWEST
             // worst value is 0
-            const float simSum = -invSimSum;
+            const float simSum = -invSimSum; //-1~0
 
             // apply gaussian
             // see: https://www.desmos.com/calculator/ribalnoawq
@@ -722,8 +722,6 @@ kernel void volume_agregateCostVolumeAtXinSlices_kernel(texture2d<half> rcMipmap
 
     constexpr sampler textureSampler (mag_filter::linear,
                                       min_filter::linear);
-    
-//    *get3DBufferAt(volAgr_d, volAgr_s, volAgr_p, v.x, v.y, v.z) = TSim(100);
     
     if((z >= 1) && (z < volDim[2] - 1))
     {
