@@ -55,6 +55,7 @@ final class CameraModel: ObservableObject {
 //        var path = FileManager.default.temporaryDirectory.path()
 //        let path = Bundle.main.resourceURL?.path()
         Pipeline_SetOutputDataDir(path)
+        Pipeline_SetTempDir(FileManager.default.temporaryDirectory.path())
     }
     
     func clearCache(directory:String) {

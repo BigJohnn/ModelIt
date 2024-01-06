@@ -48,6 +48,11 @@ void Pipeline_SetOutputDataDir(const char *directory)
     p.SetOutputDataDir(directory);
 }
 
+void Pipeline_SetTempDir(const char *directory)
+{
+    p.SetTempDir(directory);
+}
+
 void Pipeline_FeatureExtraction()
 {
     printf("Pipeline_FeatureExtraction\n");

@@ -12,6 +12,10 @@ target 'ModelIt' do
   
   pod 'assimp', :path => './deps/assimp'
   
+  pod 'boost', :path => './deps/boost'
+  
+  pod 'geogram', :path => './deps/geogram'
+  
   pod 'mtlkernels', :path => './deps/mtlkernels', :inhibit_warnings => true
   
   pod 'SoftVision', :path => './deps/SoftVision', :inhibit_warnings => true
