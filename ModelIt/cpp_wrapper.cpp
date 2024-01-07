@@ -85,3 +85,8 @@ void Pipeline_DepthMapEstimation()
 {
     p.DepthMapEstimation();
 }
+
+void Pipeline_Meshing()
+{
+    p.Meshing();
+}

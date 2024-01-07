@@ -32,6 +32,7 @@ void Pipeline_FeatureMatching();
 void Pipeline_SFM();
 void Pipeline_PrepareDenseScene();
 void Pipeline_DepthMapEstimation();
+void Pipeline_Meshing();
 
 #ifdef __cplusplus
 }

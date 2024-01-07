@@ -111,7 +111,7 @@ SIFT).
 
 #include "lbp.h"
 #include "mathop.h"
-#include "string.h"
+#include <string.h>
 
 /* ---------------------------------------------------------------- */
 /*                                           Initialization helpers */
