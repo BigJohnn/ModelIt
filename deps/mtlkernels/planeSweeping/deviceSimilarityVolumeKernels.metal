@@ -153,9 +153,7 @@ kernel void volume_computeSimilarity_kernel(device TSim* out_volume1st_d, consta
     unsigned int roiY = index.y; //0~159
     unsigned int roiZ = index.z; // 0~23
 
-    unsigned int roiWidth = roi.rb.x - roi.lt.x; //90
-    unsigned int roiHeight = roi.rb.y - roi.lt.y; //160
-    if(roiX >= roiWidth || roiY >= roiHeight) // no need to check roiZ
+    if(isBeyondROI(index, roi)) // no need to check roiZ
         return;
 
     // corresponding volume coordinates
@@ -229,7 +227,7 @@ kernel void volume_computeSimilarity_kernel(device TSim* out_volume1st_d, consta
       constexpr const float fmaxVal = 1.0f;
       constexpr const float fmultiplier = 1.0f / (fmaxVal - fminVal);
 
-      fsim = (fsim - fminVal) * fmultiplier;
+      fsim = (fsim/*-1~0, or 1 invalid*/ - fminVal) * fmultiplier;
 
 #ifdef TSIM_USE_FLOAT
       // no clamp
@@ -672,7 +670,7 @@ kernel void volume_computeBestZInSlice_kernel(device TSimAcc* xzSlice_d, constan
     for(int z = 1; z < volDimZ; ++z)
     {
         const TSimAcc cst = *get2DBufferAt(xzSlice_d, xzSlice_p, x, z);
-        bestCst = cst < bestCst ? cst : bestCst;  // min(cst, bestCst);
+        bestCst = cst < bestCst ? cst : bestCst;  // min(cst, bestCst); //0 is the best sim
     }
     ySliceBestInColCst_d[x] = bestCst;
 }

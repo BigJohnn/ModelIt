@@ -6,134 +6,18 @@ using namespace metal;
 
 namespace depthMap {
 
-//inline uchar4 float4_to_uchar4(const device float4& a)
+//void outerMultiply(thread float3x3& O3x3, const thread float3& a, const thread float3& b)
 //{
-//    return uchar4((unsigned char)a.x, (unsigned char)a.y, (unsigned char)a.z, (unsigned char)a.w);
+//    O3x3[0] = a.x * b.x;
+//    O3x3[3] = a.x * b.y;
+//    O3x3[6] = a.x * b.z;
+//    O3x3[1] = a.y * b.x;
+//    O3x3[4] = a.y * b.y;
+//    O3x3[7] = a.y * b.z;
+//    O3x3[2] = a.z * b.x;
+//    O3x3[5] = a.z * b.y;
+//    O3x3[8] = a.z * b.z;
 //}
-//
-//inline float4 uchar4_to_float4(const device uchar4& a)
-//{
-//    return float4((float)a.x, (float)a.y, (float)a.z, (float)a.w);
-//}
-
-//inline float dot(const device float3& a, const device float3& b)
-//{
-//    return a.x * b.x + a.y * b.y + a.z * b.z;
-//}
-
-//inline float dot(const float2& a, const float2& b)
-//{
-//    return a.x * b.x + a.y * b.y;
-//}
-
-//inline float size(const device float3& a)
-//{
-//    return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-//}
-//
-//inline float size(const device float2& a)
-//{
-//    return sqrt(a.x * a.x + a.y * a.y);
-//}
-//
-//inline float dist(const device float3& a, const device float3& b)
-//{
-//    return size(a - b);
-//}
-//
-//inline float dist(const device float2& a, const device float2& b)
-//{
-//    return size(a - b);
-//}
-
-//inline float3 cross(const device float3& a, const device float3& b)
-//{
-//    return float3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
-//}
-
-//inline float3 M3x3mulV3( const device float* M3x3, const device float3& V)
-//{
-//    return float3(M3x3[0] * V.x + M3x3[3] * V.y + M3x3[6] * V.z,
-//                       M3x3[1] * V.x + M3x3[4] * V.y + M3x3[7] * V.z,
-//                       M3x3[2] * V.x + M3x3[5] * V.y + M3x3[8] * V.z);
-//}
-
-//inline float3 M3x3mulV2( const device float* M3x3, const device float2& V)
-//{
-//    return float3(M3x3[0] * V.x + M3x3[3] * V.y + M3x3[6],
-//                       M3x3[1] * V.x + M3x3[4] * V.y + M3x3[7],
-//                       M3x3[2] * V.x + M3x3[5] * V.y + M3x3[8]);
-//}
-
-//inline float3 M3x4mulV3(const device float* M3x4, const device float3& V)
-//{
-//    return float3(M3x4[0] * V.x + M3x4[3] * V.y + M3x4[6] * V.z + M3x4[9],
-//                       M3x4[1] * V.x + M3x4[4] * V.y + M3x4[7] * V.z + M3x4[10],
-//                       M3x4[2] * V.x + M3x4[5] * V.y + M3x4[8] * V.z + M3x4[11]);
-//}
-
-//inline float2 V2M3x3mulV2(device float* M3x3, device float2& V)
-//{
-//    const float d = M3x3[2] * V.x + M3x3[5] * V.y + M3x3[8];
-//    return float2((M3x3[0] * V.x + M3x3[3] * V.y + M3x3[6]) / d, (M3x3[1] * V.x + M3x3[4] * V.y + M3x3[7]) / d);
-//}
-
-
-
-
-//inline void M3x3mulM3x3(device float* O3x3, const device float* A3x3, const device float* B3x3)
-//{
-//    O3x3[0] = A3x3[0] * B3x3[0] + A3x3[3] * B3x3[1] + A3x3[6] * B3x3[2];
-//    O3x3[3] = A3x3[0] * B3x3[3] + A3x3[3] * B3x3[4] + A3x3[6] * B3x3[5];
-//    O3x3[6] = A3x3[0] * B3x3[6] + A3x3[3] * B3x3[7] + A3x3[6] * B3x3[8];
-//
-//    O3x3[1] = A3x3[1] * B3x3[0] + A3x3[4] * B3x3[1] + A3x3[7] * B3x3[2];
-//    O3x3[4] = A3x3[1] * B3x3[3] + A3x3[4] * B3x3[4] + A3x3[7] * B3x3[5];
-//    O3x3[7] = A3x3[1] * B3x3[6] + A3x3[4] * B3x3[7] + A3x3[7] * B3x3[8];
-//
-//    O3x3[2] = A3x3[2] * B3x3[0] + A3x3[5] * B3x3[1] + A3x3[8] * B3x3[2];
-//    O3x3[5] = A3x3[2] * B3x3[3] + A3x3[5] * B3x3[4] + A3x3[8] * B3x3[5];
-//    O3x3[8] = A3x3[2] * B3x3[6] + A3x3[5] * B3x3[7] + A3x3[8] * B3x3[8];
-//}
-//
-//inline void M3x3minusM3x3(device float* O3x3, device float* A3x3, device float* B3x3)
-//{
-//    O3x3[0] = A3x3[0] - B3x3[0];
-//    O3x3[1] = A3x3[1] - B3x3[1];
-//    O3x3[2] = A3x3[2] - B3x3[2];
-//    O3x3[3] = A3x3[3] - B3x3[3];
-//    O3x3[4] = A3x3[4] - B3x3[4];
-//    O3x3[5] = A3x3[5] - B3x3[5];
-//    O3x3[6] = A3x3[6] - B3x3[6];
-//    O3x3[7] = A3x3[7] - B3x3[7];
-//    O3x3[8] = A3x3[8] - B3x3[8];
-//}
-//
-//inline void M3x3transpose(device float* O3x3, const device float* A3x3)
-//{
-//    O3x3[0] = A3x3[0];
-//    O3x3[1] = A3x3[3];
-//    O3x3[2] = A3x3[6];
-//    O3x3[3] = A3x3[1];
-//    O3x3[4] = A3x3[4];
-//    O3x3[5] = A3x3[7];
-//    O3x3[6] = A3x3[2];
-//    O3x3[7] = A3x3[5];
-//    O3x3[8] = A3x3[8];
-//}
-
-inline void outerMultiply(thread float3x3& O3x3, const thread float3& a, const thread float3& b)
-{
-    O3x3[0] = a.x * b.x;
-    O3x3[3] = a.x * b.y;
-    O3x3[6] = a.x * b.z;
-    O3x3[1] = a.y * b.x;
-    O3x3[4] = a.y * b.y;
-    O3x3[7] = a.y * b.z;
-    O3x3[2] = a.z * b.x;
-    O3x3[5] = a.z * b.y;
-    O3x3[8] = a.z * b.z;
-}
 
 inline float3 linePlaneIntersect(constant float3& linePoint,
                                             const thread float3& lineVect,

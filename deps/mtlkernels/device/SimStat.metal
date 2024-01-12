@@ -104,7 +104,6 @@ struct simStat
          float sim = isfinite(rawSim) ? -rawSim : 1.0f;
          // sim = fmaxf(fminf(sim, 1.0f), -1.0f); // clamp
          
-//         sim = 0.5f;
          return sim;
      }
 

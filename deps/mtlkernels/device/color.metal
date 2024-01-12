@@ -194,8 +194,8 @@ inline float CostYKfromLab(const int dx,
 
     // spatial distance to the center of the patch (in pixels)
     // without optimization
-     float deltaP = sqrt(float(dx * dx + dy * dy));
-//    float deltaP = __fsqrt_rn(float(dx * dx + dy * dy)); //CHECK
+    float deltaP = round(sqrt(float(dx * dx + dy * dy)));
+//    float deltaP = __fsqrt_rn(float(dx * dx + dy * dy)); //CHECK round to nearest
 
     deltaP *= invGammaP;
 
